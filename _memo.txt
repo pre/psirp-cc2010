@@ -1,0 +1,17 @@
+Version Id (Vrid)
+
+• Publication attributes
+Buffer – Len – Sid – Rid – Vrid – Version_index – Version_count –
+Saved_version_index –
+
+• Functions
+– pub_s(Sid, Rid)
+– sub_s(Sid, Rid)
+– subscribe_versions(p, initial_v, final_v)
+– republish()
+
+
+• Helpers
+– atoid(string)
+– idtoa(id)
+– idstoa(Sid, Rid)

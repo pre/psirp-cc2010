@@ -1,0 +1,6 @@
+
+PSIRP-methods should be queried from a scoped namespace, 
+now functions such as create() and sub_s() are in global namespace.
+
+How to grow slice length when republishing?
+- should we create() a new publishment?
