@@ -12,8 +12,9 @@ class Publishment(object):
 		self.sid = sid
 		self.rid = rid
 
-	def republish(self):
-		self.content.pub_s(self.sid, self.rid)
+#	def republish(self):
+#		self.content.pub_s(self.sid, self.rid)
+#		self.content.republish()
 		
 	def update_content(self, new_content):
 		# TODO: how to republish with a new length?
@@ -21,6 +22,6 @@ class Publishment(object):
 		# new_pub = create(len(new_content))
 		# new_pub.buffer[:] = new_content
 		# self.content = new_pub
-		self.republish()
+		self.content.republish()
 			
 	
