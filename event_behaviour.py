@@ -1,6 +1,6 @@
 from psirp.libpsirp import *
 
-MAX_PRINT_LEN = 100 # This is just for testing
+MAX_PRINT_LEN = 500 # This is just for testing
 
 def exc_handler(exception):
     """Exception handler function."""
@@ -64,78 +64,3 @@ def get_init_handle_event(pskq):
         # faults will occur.
     
     return init_handle_event
-
-
-pskq = PubSubKQueue()
-init_handle_event = get_init_handle_event(pskq)
-sid = atoid("::aa")
-rid = atoid("::bb")
-asd = pskq.register_advance_subscription(sid, rid, PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_NET_PERSISTENT, init_handle_event)
-
-if isinstance(asd, Publication):
-    print "inside!"
-    print "no?"
-    # In this case the publication already exists - as an
-    # example, we here call the initial event handler.
-    pub = asd # This adv. sub. descriptor is really a publication
-    init_handle_event(None, pub)
-
-def exc_handler(exception):
-    """Exception handler function."""
-    from traceback import print_exc
-    print_exc() # Just print what happened and try to proceed
-
-print("Listen to events")
-try:
-    pskq.listen_and_handle(exc_handler) # Event handling "loop"
-except KeyboardInterrupt:
-    # E.g. ^C pressed
-    print("Interrupted")
-    
-print "test"
-
-#def _main():
-# Some SId/RId pairs
-# sid_rids = ((atoid("::aa"), atoid("::bb")),
-#             (atoid("88::77"), atoid("ee::dd")),
-#             (atoid("88::77"), atoid("dd::cc")))
-# 
-# # Subscription flags; these are useful for "network subscriptions"
-# sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_NET_PERSISTENT
-# 
-# # Open an event queue
-# pskq = PubSubKQueue()
-# 
-# # Subscribe to the defined publications
-# for sid, rid in sid_rids:
-#     print("Subscribing to SId/RId: %s" % idstoa(sid, rid))
-#     
-#     init_handle_event = get_init_handle_event(pskq)
-#     
-#     # Try to register to a publication that maybe doesn't exist
-#     # yet. By using only one queue, we can avoid doing synchronous
-#     # subscriptions in multiple parallel threads. That ought to
-#     # simplifiy our code quite significantly.
-#     asd = pskq.register_advance_subscription(sid, rid, sub_flags,
-#                                              init_handle_event)
-#     
-#     if isinstance(asd, Publication):
-#         # In this case the publication already exists - as an
-#         # example, we here call the initial event handler.
-#         pub = asd # This adv. sub. descriptor is really a publication
-#         init_handle_event(None, pub)
-# 
-# def exc_handler(exception):
-#     """Exception handler function."""
-#     from traceback import print_exc
-#     print_exc() # Just print what happened and try to proceed
-# 
-# print("Listen to events")
-# try:
-#     pskq.listen_and_handle(exc_handler) # Event handling "loop"
-# except KeyboardInterrupt:
-#     # E.g. ^C pressed
-#     print("Interrupted")
-# 
-# # Close the event queue (although it gets closed anyway at exit time)
-# pskq.close()

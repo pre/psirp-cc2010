@@ -12,7 +12,7 @@ class BufferedPublishment(Publishment):
     left_boundary = offset
     right_boundary = len(new_content)+offset
     self.content.buffer[left_boundary:right_boundary] = new_content
-  
+    self.content.republish()
 	
   
 

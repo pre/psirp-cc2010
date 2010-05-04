@@ -33,3 +33,27 @@ Why buffer length has to be fixed? Why can't PSIRP adjust it dynamically?
   _new_content_new_content_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT
   
 Could there be a "replace"-function in the API which would replace old published content with new content without having to deal with buffer lengths?
+
+
+What does this mean?
+  Traceback (most recent call last):
+    File "/usr/local/lib/python2.6/site-packages/psirp/libpsirp.py", line 852, in listen_and_handle
+      pub.handle_event(ev, pub) # Call event handler
+    File "/usr/home/psirp/psirp/event_behaviour.py", line 22, in handle_event
+      for version in pub.get_versions_since_saved_index():
+    File "/usr/local/lib/python2.6/site-packages/psirp/libpsirp.py", line 1033, in subscribe_versions
+      % (start_index, stop_index))
+  IndexError: Version indexes 125..124 out of range
+  
+  x^[[A^CInterrupted
+  Subscriber:
+  * content:       <DataPublication SId=::aa RId=::bb vRId=56657273696f6e::1f42c6461c1e2fa0921e918dc6a01140c4f5e1de len=60 fd=4>
+  * version index: 124
+  * version count: 125
+
+And at startup
+ Subscriber:
+ * content:       <DataPublication SId=::aa RId=::bb vRId=::bb len=0 fd=4>
+ * version index: -1
+ * version count: 3
+ 

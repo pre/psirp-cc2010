@@ -4,6 +4,7 @@ from event_behaviour import *
 class Subscriber(object):
 	
   def __init__(self, sid, rid):
+    self.content = None
     self.sid = atoid(sid)
     self.rid = atoid(rid)
     self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_NET_PERSISTENT
@@ -20,10 +21,7 @@ class Subscriber(object):
       # In this case the publication already exists - as an
       # example, we here call the initial event handler.
       self.content = asd # This adv. sub. descriptor is really a publication
-      init_handle_event(None, self.content)		
-		
-  def content(self):
-    return self.content
+      init_handle_event(None, self.content)
   
   def listen(self):
     try:
@@ -33,10 +31,11 @@ class Subscriber(object):
         print("Interrupted")
           
   def __str__(self):
-    return   "* content:       "+ str(self.content) #+ \
-#           "\n* version index: "+ str(self.content.version_index) #+ \
-#           "\n* version count: "+ str(self.content.version_count)
-		
-		
-		
+    val =  "Subscriber:" + \
+           "\n* content:       "+ str(self.content)
+    if isinstance(self.content, Publication):
+      val = val + \
+            "\n* version index: "+ str(self.content.version_index) + \
+            "\n* version count: "+ str(self.content.version_count)
+    return val
 		

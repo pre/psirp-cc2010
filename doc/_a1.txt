@@ -1,12 +1,8 @@
 Assignment 1 – Expected implementation
 • Scenario
-– Two subscribers and one publisher (content
-provider)
-– Subscribers should be able to subscribe to content
-before it is published
-– Publisher reads some news feeds (file or Internet)
-and sends to the subscribers
-– Subscribers should display the received
-publication
+OK – Two subscribers and one publisher (content provider)
+OK – Subscribers should be able to subscribe to content before it is published
+OK – Subscribers should display the received publication
+OK – Publisher reads some news feeds (file or Internet) and sends to the subscribers
 
 • A1 report (1-2 pages)

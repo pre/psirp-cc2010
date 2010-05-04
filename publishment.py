@@ -2,6 +2,7 @@ from psirp.libpsirp import *
 
 class Publishment(object):
 	
+	# Only strings will work at the moment!
 	def __init__(self, content):
 		self.content = create(len(content))
 		self.content.buffer[:len(content)] = content
