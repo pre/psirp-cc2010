@@ -16,12 +16,7 @@ class Subscriber(object):
                                                    self.rid, 
                                                    self.sub_flags, 
                                                    init_handle_event)
-
-
-    print asd   
-    
     if isinstance(asd, Publication):
-
       # In this case the publication already exists - as an
       # example, we here call the initial event handler.
       self.content = asd # This adv. sub. descriptor is really a publication

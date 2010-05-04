@@ -1,0 +1,35 @@
+
+PSIRP-methods should be queried from a scoped namespace, 
+now functions such as create() and sub_s() are in global namespace.
+
+How to grow slice length when republishing?
+- should we create() a new publishment?
+
+Something goes wrong with the VirtualBox, it eats constantly 100% of allocated processor time and memory.
+That happens although FreeBSD does not seem to consume that much.
+
+PSIRP-API is could be "more" object oriented
+Why the programmer has to take care of publishment's length? 
+Why not to provide a object constructor which could calculate the length and 
+Why create in global namespace instead of a class method? 
+Why not to provide event-listener as a built-in method in API? 
+ - now I just copy-pasted event_example.py to its own module because I did not want to reinvent the wheel
+
+If sid and rid are strings, the following method fails silently and does not. 
+It should raise an exception and tell that parameters were incorrect.
+Parameters can only be atoid(sid) and atoid(rid).
+- FAILS: PubSubKQueue().register_advance_subscription("::aa", "::bb", [..])
+
+Why buffer length has to be fixed? Why can't PSIRP adjust it dynamically? 
+- taking care of a buffer length in Python feels very low level
+  p = Publishment("_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT")
+  p.publish("::aa","::bb")
+  p.update_content("_new_content_new_content") 
+  
+  First 100 bytes of version 56657273696f6e::f6f9afa4f21622c58e8e6a58727d6795b4f4356c of ::aa/::bb:
+  _OLD_CONTENT_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT
+
+  First 100 bytes of version 56657273696f6e::c6d7fef437be76f55de3b61666abb247ba0234c6 of ::aa/::bb:
+  _new_content_new_content_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT
+  
+Could there be a "replace"-function in the API which would replace old published content with new content without having to deal with buffer lengths?
