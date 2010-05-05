@@ -30,16 +30,17 @@ The program can be tested as follows:
 
 
 
+
 THOUGHTS ON IMPROVEMENTS
 ========================
 
-PSIRP's API methods should be queried from a namespace or from an object. Now functions such as create() and sub_s() are in global namespace. I would prefere e.g. calling a constructor Publication() instead of create() or using any instance method of an object.
+PSIRP's API methods should be queried from a specific namespace or from an object. Now functions such as create() and sub_s() are in global namespace. I would prefere e.g. calling a constructor Publication() instead of an "independent" function create(), or using any instance method of an object.
 
-Why the programmer has to take care of a publishment's length?
-Why can't PSIRP adjust it dynamically? 
-Why not to provide an object which could calculate the length internally? Taking care of any buffer length in a high level language feels a little bit inappropriate.
+Why the Python programmer has to take care of a publishment's length?
+Why can't PSIRP adjust buffers dynamically? 
+Why not to provide an object which could calculate the length internally? Taking care of any buffer length in a high level language feels a little bit inappropriate because then you need to concentrate on "how to do" instead of "what to do" (the business logic).
 
-Could there be a "replace"-function built in the API which would replace old published content with new content without having to deal with buffer lengths?
+Could there be a "replace"-function built in the API which would replace old published content with new content without having to deal with buffer lengths manually?
 
 Why not to provide an event-listener as a built-in method in API? 
 Now I just copy-pasted event_example.py to its own module because I did not want to reinvent the wheel. API could provide the code and yield a callback to allow custom behaviour for e.g. handle_event().

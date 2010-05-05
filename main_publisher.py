@@ -11,7 +11,7 @@ def system_uptime():
   
 sid_1 = "::aa"
 rid_1 = "::bb"
-sleep_amount = 3
+sleep_amount = 4
 
 print "Publishing initial content.."
 p = Publishment("_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT_OLD_CONTENT")
