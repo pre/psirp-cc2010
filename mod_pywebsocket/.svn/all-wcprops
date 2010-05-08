@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/262/trunk/src/mod_pywebsocket
+END
+standalone.py
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/258/trunk/src/mod_pywebsocket/standalone.py
+END
+util.py
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/259/trunk/src/mod_pywebsocket/util.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/259/trunk/src/mod_pywebsocket/__init__.py
+END
+dispatch.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/259/trunk/src/mod_pywebsocket/dispatch.py
+END
+memorizingfile.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/259/trunk/src/mod_pywebsocket/memorizingfile.py
+END
+headerparserhandler.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/259/trunk/src/mod_pywebsocket/headerparserhandler.py
+END
+msgutil.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/259/trunk/src/mod_pywebsocket/msgutil.py
+END
