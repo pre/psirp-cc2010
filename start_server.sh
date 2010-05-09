@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Where to find our own modules
+export PYTHONPATH=/home/psirp/psirp
+
 echo "Removing OS X crappy files"
 rm -vf public/websocket/._*
 
