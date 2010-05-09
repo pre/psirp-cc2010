@@ -1,0 +1,4 @@
+http://tav.espians.com/ruby-style-blocks-in-python.html
+
+http://stackoverflow.com/questions/231767/can-somebody-explain-me-this-python-yield-statement
+
