@@ -22,13 +22,26 @@ class Subscriber(object):
       # example, we here call the initial event handler.
       self.content = asd # This adv. sub. descriptor is really a publication
       init_handle_event(None, self.content)
-  
+
+  # Loop copied from PubSubKQueue#listen_and_handle()  
+  # and modified to yield return value for output processing.
   def listen(self):
     try:
-        self.pskq.listen_and_handle(exc_handler) # Event handling "loop"
+      while True:
+        timeout = None
+        max_tot_evs = None
+        evpubl = self.pskq.listen(1, timeout) # Listen to an event
+        if len(evpubl) == 0:
+          raise PubSubTimeoutException("Timeout") # Timeout
+        for ev, pub in evpubl:
+          try:
+            yield(pub.handle_event(ev, pub))
+          except Exception, e:
+            exc_handler(e) # Call exception handler
+
     except KeyboardInterrupt:
-        # E.g. ^C pressed
-        print("Interrupted")
+      # E.g. ^C pressed
+      print("Interrupted")
           
   def __str__(self):
     val =  "Subscriber:" + \
@@ -38,4 +51,3 @@ class Subscriber(object):
             "\n* version index: "+ str(self.content.version_index) + \
             "\n* version count: "+ str(self.content.version_count)
     return val
-		

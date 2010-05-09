@@ -32,6 +32,8 @@ from mod_pywebsocket import msgutil
 from datetime import datetime
 import time
 
+import sys
+
 _GOODBYE_MESSAGE = 'Goodbye'
 
 
@@ -45,7 +47,8 @@ def web_socket_transfer_data(request):
   while True:
     time.sleep(1)
     date = datetime.now()
-    msgutil.send_message(request, 'clock!%s' % date)   
+    #msgutil.send_message(request, 'clock!%s' % date)   
+    msgutil.send_message(request, sys.stdout.write("hello world\n"))
     #request.connection.write("testi")
     # line = msgutil.receive_message(request)
     # msgutil.send_message(request, line)

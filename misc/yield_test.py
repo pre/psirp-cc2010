@@ -1,18 +1,18 @@
 
-import sys
-
-def anonymous_function(param):
-  yield "Param oli" + str(param)
-
-
-def generator():
-  yield
-
-def twice(f):
-    f()
-    f()
-
-twice(lambda: sys.stdout.write("hello world\n"))
+#import sys
+# 
+# def anonymous_function(param):
+#   yield "Param oli" + str(param)
+# 
+# 
+# def generator():
+#   yield
+# 
+# def twice(f):
+#     f()
+#     f()
+# 
+# twice(lambda: sys.stdout.write("hello world\n"))
 
 # > ## Ruby #####################
 # > def twice

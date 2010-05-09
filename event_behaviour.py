@@ -1,6 +1,6 @@
 from psirp.libpsirp import *
 
-MAX_PRINT_LEN = 500 # This is just for testing
+#MAX_PRINT_LEN = 500 # This is just for testing
 
 def exc_handler(exception):
     """Exception handler function."""
@@ -20,10 +20,10 @@ def handle_event(event, pub):
     # the subscribed version's index minus 1. The saved index is then
     # updated to the current index of pub in the call below.
     for version in pub.get_versions_since_saved_index():
-        # Here we do whatever we want to do with the version
-        print("First %d bytes of version %s of %s:\n%s\n"
-              % (MAX_PRINT_LEN, version.vridstr, idstoa(pub.sid, pub.rid),
-                 version.buffer[:MAX_PRINT_LEN]))
+      yield(version)
+#        print("First %d bytes of version %s of %s:\n%s\n"
+#              % (MAX_PRINT_LEN, version.vridstr, idstoa(pub.sid, pub.rid),
+#                 version.buffer[:MAX_PRINT_LEN]))
 
 def get_init_handle_event(pskq):
     """Getter for the initial event handler."""
