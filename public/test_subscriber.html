@@ -1,0 +1,71 @@
+<!-- http://diffract.me/2009/12/websockets-tutorialexample-with-pywebsocket/ -->
+<html>
+
+<head>
+
+<script src="javascript/jquery-1.4.2.js"></script>
+
+<script>
+
+$(document).ready(function(){
+
+  var ws;
+
+  if ("WebSocket" in window) {
+    debug("Horray you have web sockets. Trying to connect...");
+    ws = new WebSocket("ws://192.168.2.3:80/subscriber");
+
+    ws.onopen = function() {
+      // Web Socket is connected. You can send data by send() method.
+      debug("connected...");
+      ws.send("hello from the browser");
+      ws.send("more from browser");
+    };
+
+    run = function() {
+      var val=$("#i1").val(); // read the entry
+      $("#i1").val("");       // and clear it
+      ws.send(val);           // tell erlang
+      return true;            // must do this
+    };
+
+    ws.onmessage = function (evt) {
+      //alert(evt.data);
+      var data = evt.data;
+      var i = data.indexOf("!");
+      var tag = data.slice(0,i);
+      var val = data.slice(i+1);
+      $("#" + tag).html(val);
+    };
+
+    ws.onclose = function() {
+      debug(" socket closed");
+    };
+  } else {
+      alert("You have no web sockets");
+};
+
+function debug(str){
+  $("#debug").append("<p>" +  str);
+};
+
+});
+</script>
+
+</head>
+
+<body>
+
+<h1>Interaction experiment</h1>
+
+<h2>Debug</h2>
+<div id="debug"></div>
+
+<fieldset>
+<legend>Clock</legend>
+<div id="clock">I am a clock</div>
+</fieldset>
+
+</body>
+
+</html>
