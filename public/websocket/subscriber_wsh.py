@@ -37,13 +37,17 @@ def web_socket_do_extra_handshake(request):
   print "Connected."
   pass  # Always accept.
 
-
 def web_socket_transfer_data(request):
   print "Transfer"
-  s1 = Subscriber("::aa", "::bb")
+  sid, rid = msgutil.receive_message(request).decode('utf-8').split(",")
+  sid = str(sid)
+  rid = str(rid)
+  print "sid: "+ sid + " rid: " + rid
+  msgutil.send_message(request, "subscribing to sid: '"+sid+"', rid: '"+ rid +"'")
+  s1 = Subscriber(sid, rid)
   while True:
     for event in s1.listen():
       if event is not None:
         for version in event:
-          print('%s' % version.buffer) # debug
-          msgutil.send_message(request, 'clock!%s' % version.buffer)
+          print('%s' % version.buffer)
+          msgutil.send_message(request, '%s' % version.buffer)

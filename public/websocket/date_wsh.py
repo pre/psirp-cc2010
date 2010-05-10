@@ -47,9 +47,7 @@ def web_socket_transfer_data(request):
   while True:
     time.sleep(1)
     date = datetime.now()
-    #msgutil.send_message(request, 'clock!%s' % date)   
-    msgutil.send_message(request, sys.stdout.write("hello world\n"))
-    #request.connection.write("testi")
+    msgutil.send_message(request, 'clock!%s' % date)   
     # line = msgutil.receive_message(request)
     # msgutil.send_message(request, line)
     # if line == _GOODBYE_MESSAGE:

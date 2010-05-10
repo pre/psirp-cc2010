@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:svg="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xml:lang="en" lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+  <script src="javascript/jquery-1.4.2.js"></script>
+  <script type="text/ecmascript" src="javascript/subscriber.js"></script>
+  <script type="text/ecmascript">
+    var subscriber = null;
+    var wsAddress = "ws://192.168.2.3:80/subscriber";
+    var sid = "::aa";
+    var rid = "::bb";
+    window.onload = function() {
+      var pub_element_id = "#publishment"
+      subscriber = new Subscriber(wsAddress, pub_element_id, sid, rid);
+    }
+  </script>
+
+</head>
+
+<body>
+
+<h1>Interaction experiment</h1>
+
+<h2>Debug</h2>
+<div id="debug"></div>
+
+<fieldset>
+  <legend>Received data</legend>
+  <div id="publishment"></div>
+</fieldset>
+
+</body>
+
+</html>
