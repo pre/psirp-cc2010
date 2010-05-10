@@ -44,10 +44,12 @@ class Subscriber(object):
       print("Interrupted")
           
   def __str__(self):
-    val =  "Subscriber:" + \
-           "\n* content:       "+ str(self.content)
+    val =  "Subscriber:" 
     if isinstance(self.content, Publication):
       val = val + \
+           "\n* content:       "+ str(self.content.buffer) + \
             "\n* version index: "+ str(self.content.version_index) + \
             "\n* version count: "+ str(self.content.version_count)
+    else:
+      val = val + " empty"
     return val

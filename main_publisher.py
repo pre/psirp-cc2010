@@ -20,17 +20,16 @@ sleep(sleep_amount)
 
 print "Updating it.."
 p.update_content("_new_content_new_content")
+sleep(sleep_amount)
 
 print "Publishing system uptime.."
-sleep(sleep_amount)
 p.update_content(system_uptime())
-
-print "Waiting for some time.."
 sleep(sleep_amount)
 
 print "Publishing content with BufferedPublishment.."
 bp = BufferedPublishment("_OLD_BUFFERED_CONTENT_OLD_BUFFERED_CONTENT_OLD_BUFFERED_CONTENT_OLD_BUFFERED_CONTENT_OLD_BUFFERED_CONTENT_OLD_BUFFERED_CONTENT")
 bp.publish(sid_1, rid_1)
+sleep(sleep_amount)
 
 print "Replacing content with shorter string without cleaning up older content.."
 bp.replace_content("_new_buffered_content_new_buffered_content")

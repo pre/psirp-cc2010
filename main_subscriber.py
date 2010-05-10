@@ -12,8 +12,9 @@ print s1
 
 print "\nListening for updates:"
 for event in s1.listen():
-  for version in event:
-    print "Received: ", version.buffer
+  if event is not None:
+    for version in event:
+      print "Received: ", version.buffer
 
 print s1
 

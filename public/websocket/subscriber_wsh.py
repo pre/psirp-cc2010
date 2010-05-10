@@ -43,6 +43,7 @@ def web_socket_transfer_data(request):
   s1 = Subscriber("::aa", "::bb")
   while True:
     for event in s1.listen():
-      for version in event:
-        print('%s' % version.buffer) # debug
-        msgutil.send_message(request, 'clock!%s' % version.buffer)
+      if event is not None:
+        for version in event:
+          print('%s' % version.buffer) # debug
+          msgutil.send_message(request, 'clock!%s' % version.buffer)
