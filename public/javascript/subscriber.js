@@ -27,10 +27,10 @@ var Subscriber = function(wsAddress, contentElementId, sid, rid) {
     };
   } else {
       alert("You have no web sockets");
-};
+  };
 
-function debug(str){
-  $("#debug").append("<p>" +  str);
-};
+  function debug(str){
+    $("#debug").append("<p>" +  str);
+  };
 
 }
