@@ -39,9 +39,7 @@ def web_socket_do_extra_handshake(request):
 
 def web_socket_transfer_data(request):
   print "Transfer"
-  sid, rid = msgutil.receive_message(request).decode('utf-8').split(",")
-  sid = str(sid)
-  rid = str(rid)
+  sid, rid = msgutil.receive_message(request).encode('utf-8').split(",")
   print "sid: "+ sid + " rid: " + rid
   msgutil.send_message(request, "subscribing to sid: '"+sid+"', rid: '"+ rid +"'")
   s1 = Subscriber(sid, rid)
