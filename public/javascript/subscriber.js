@@ -5,7 +5,7 @@ var Subscriber = function(wsAddress, contentElementId, sid, rid) {
   
   if ("WebSocket" in window) {
     debug("Trying to connect...");
-    this.ws = new WebSocket(wsAddress);
+    ws = new WebSocket(wsAddress);
 
     ws.onopen = function() {
       // Web Socket is connected. You can send data by send() method.
