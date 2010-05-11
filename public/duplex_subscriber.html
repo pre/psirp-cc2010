@@ -15,12 +15,45 @@
     var wsAddress = "ws://192.168.2.3:80/duplex_subscriber";
     var sid = "::aa";
     var rid = "::bb";
+    
     window.onload = function() {
+      $('.seat').each(function() {
+        this.onclick = function() {
+          alert("toimii! id: "+ this.id);
+          return false;
+        }
+      });
+      
       var pub_element_id = "#publishment"
-      subscriber = new Subscriber(wsAddress, pub_element_id, sid, rid);
+      subscriber = new Subscriber(wsAddress, pub_element_id, sid, rid, "a1");
     }
   </script>
 
+  <style type="text/css">
+    .seat {
+      width:  50px;
+      height: 50px;
+      border: 1px black dotted;
+      float:  left;
+    }
+    
+    fieldset {
+      clear:  both;
+    }
+    
+    .sold {
+      border-color: red;
+    }
+    
+    .available {
+      border-color: green;
+    }
+    
+    .reserved {
+      border-color: yellow;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -31,6 +64,14 @@
 
 <h2>Debug</h2>
 <div id="debug"></div>
+
+<fieldset class="seats">
+  <legend>Seats in Theatre X</legend>
+    <div class="seat" id="a1" onclick="subscriber.toggleSeatStatus(this.id)">JES</div>
+    <div class="seat" id="a2">image</div>
+    <div class="seat" id="a3">from</div>
+    <div class="seat" id="a4">psirp</div>
+</fieldset>
 
 <fieldset>
   <legend>Received data</legend>

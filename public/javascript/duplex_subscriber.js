@@ -1,25 +1,25 @@
 
-var Subscriber = function(wsAddress, contentElementId, sid, rid) {
+var Subscriber = function(wsAddress, messageElementId, sid, rid, subscriberDomId) {
 
   if (!("WebSocket" in window)) {
     alert("Your browser does not support websockets.");
     return;
-  }
+  };
   
   this.ws = new WebSocket(wsAddress);
-
+  this.sid = sid;
+  this.rid = rid;
+  this.messageElementId = messageElementId;
+  this.subscriberDomId = subscriberDomId;
+  
   this.ws.onopen = function() {
     debug("connected...");
     this.send(sid +","+ rid); // HACK: comma separated: sid,rid (todo: json)
-    this.send("more from browser");     // not handled yet
+    this.send("more from browser");
   };
 
   this.ws.onmessage = function (event) {
-    // var data = evt.data;
-    // var i = data.indexOf("!");
-    // var tag = data.slice(0,i);
-    // var val = data.slice(i+1);
-    $(contentElementId).append("<p>" + event.data + "</p>");
+    $(messageElementId).append("<p>" + event.data + "</p>");
   };
 
   this.ws.onclose = function() {
@@ -32,10 +32,9 @@ var Subscriber = function(wsAddress, contentElementId, sid, rid) {
 
   this.sendButtonEvent = function(value) {
     this.ws.send("Nappia painettiin! Napin arvo: "+ value);
-  }
+  };
   
-  this.testi = function() {
-    alert("toimii");
+  this.toggleSeatStatus = function() {
+    this.ws.send("Toggled seat status, id: "+ this.subscriberDomId)
   }
-
 }
