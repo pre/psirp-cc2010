@@ -18,7 +18,6 @@
     window.onload = function() {
       var pub_element_id = "#publishment"
       subscriber = new Subscriber(wsAddress, pub_element_id, sid, rid);
-      subscriber.testi();
     }
   </script>
 
@@ -28,7 +27,7 @@
 
 <h1>Interaction experiment</h1>
 
-<button onclick="subscriber.sendButtonEvent();">Et uskalla painaa!</button>
+<button onclick="subscriber.sendButtonEvent(this.value);" value="value_attr in html!">Et uskalla painaa!</button>
 
 <h2>Debug</h2>
 <div id="debug"></div>

@@ -19,7 +19,7 @@ var Subscriber = function(wsAddress, contentElementId, sid, rid) {
       // var i = data.indexOf("!");
       // var tag = data.slice(0,i);
       // var val = data.slice(i+1);
-      $(contentElementId).append("<p>" + event.data + "</p>");
+      $(contentElementId).append("<br />" + event.data);
     };
 
     ws.onclose = function() {
@@ -33,12 +33,4 @@ var Subscriber = function(wsAddress, contentElementId, sid, rid) {
     $("#debug").append("<p>" +  str);
   };
   
-  this.sendButtonEvent = function() {
-    ws.send("Nappia painettiin!");
-  }
-  
-  this.testi = function() {
-    alert("toimii");
-  }
-
 }
