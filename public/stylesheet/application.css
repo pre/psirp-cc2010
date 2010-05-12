@@ -1,0 +1,24 @@
+.seat {
+  width:  50px;
+  height: 50px;
+  margin: 5px;
+  border: 3px black dotted;
+  float:  left;
+}
+
+fieldset {
+  clear:  both;
+}
+
+.confirmed {
+  border-color: red;
+}
+
+.unconfirmed {
+  border-color: yellow;
+}
+
+.available {
+  border-color: green;
+}
+

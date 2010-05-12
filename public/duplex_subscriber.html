@@ -7,6 +7,8 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link type="text/css" rel="stylesheet" href="stylesheet/application.css" />
+  
 
   <script src="javascript/jquery-1.4.2.js"></script>
   <script type="text/ecmascript" src="javascript/duplex_subscriber.js"></script>
@@ -15,45 +17,36 @@
     var wsAddress = "ws://192.168.2.3:80/duplex_subscriber";
     var sid = "::aa";
     var rid = "::bb";
-    
+    var messageElementId = "messages"  
+      
     window.onload = function() {
       $('.seat').each(function() {
+        rid = "::"+ this.id;
+        this.seat = new Seat(sid, rid, this.id);
         this.onclick = function() {
-          alert("toimii! id: "+ this.id);
+          this.seat.toggleStatus();
           return false;
         }
       });
       
-      var pub_element_id = "#publishment"
-      subscriber = new Subscriber(wsAddress, pub_element_id, sid, rid, "a1");
+      subscriber = new Subscriber(wsAddress, messageElementId, sid, rid, "a1");
+    }
+    
+    var Seat = function(sid, rid, domId) {
+      this.domId = domId;
+      this.sid = sid;
+      this.rid = rid;
+      this.seat_subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid, this.domId);
+      
+      this.toggleStatus = function() {
+        this.seat_subscriber.ws.send("Toggled seat status, id: "+ this.domId);
+        $("#"+this.domId).addClass("unconfirmed");
+      }
+      
     }
   </script>
 
-  <style type="text/css">
-    .seat {
-      width:  50px;
-      height: 50px;
-      border: 1px black dotted;
-      float:  left;
-    }
-    
-    fieldset {
-      clear:  both;
-    }
-    
-    .sold {
-      border-color: red;
-    }
-    
-    .available {
-      border-color: green;
-    }
-    
-    .reserved {
-      border-color: yellow;
-    }
-
-  </style>
+  
 </head>
 
 <body>
@@ -61,13 +54,20 @@
 <h1>Interaction experiment</h1>
 
 <button onclick="subscriber.sendButtonEvent(this.value);" value="value_attr in html!">Et uskalla painaa!</button>
+<button onclick="document.getElementById(messageElementId).innerHTML=''">Clear messages</button>
 
 <h2>Debug</h2>
 <div id="debug"></div>
 
 <fieldset class="seats">
   <legend>Seats in Theatre X</legend>
-    <div class="seat" id="a1" onclick="subscriber.toggleSeatStatus(this.id)">JES</div>
+    <div class="seat" id="a1"><img src="data:image/png;base64,
+    iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGP
+    C/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YGARc5KB0XV+IA
+    AAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAF1J
+    REFUGNO9zL0NglAAxPEfdLTs4BZM4DIO4C7OwQg2JoQ9LE1exdlYvBBeZ7jq
+    ch9//q1uH4TLzw4d6+ErXMMcXuHWxId3KOETnnXXV6MJpcq2MLaI97CER3N0
+    vr4MkhoXe0rZigAAAABJRU5ErkJggg==" alt="Red dot" /></div>
     <div class="seat" id="a2">image</div>
     <div class="seat" id="a3">from</div>
     <div class="seat" id="a4">psirp</div>
@@ -75,7 +75,7 @@
 
 <fieldset>
   <legend>Received data</legend>
-  <div id="publishment"></div>
+  <div id="messages"></div>
 </fieldset>
 
 </body>

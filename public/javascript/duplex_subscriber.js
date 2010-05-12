@@ -19,7 +19,7 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, subscriberDomId
   };
 
   this.ws.onmessage = function (event) {
-    $(messageElementId).append("<p>" + event.data + "</p>");
+    $("#"+messageElementId).append("<p>" + event.data + "</p>");
   };
 
   this.ws.onclose = function() {
@@ -34,7 +34,4 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, subscriberDomId
     this.ws.send("Nappia painettiin! Napin arvo: "+ value);
   };
   
-  this.toggleSeatStatus = function() {
-    this.ws.send("Toggled seat status, id: "+ this.subscriberDomId)
-  }
 }

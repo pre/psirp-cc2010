@@ -15,6 +15,7 @@ class duplex_subscriber(Thread):
   def run(self):
     while True:
       line = msgutil.receive_message(self.websocket).encode('utf-8')
+      print("received %s" % line)
       msgutil.send_message(self.websocket, 'vastaanotettu: %s' % line)
 
 
@@ -24,7 +25,7 @@ def web_socket_do_extra_handshake(request):
 
 def web_socket_transfer_data(request):
   print "Transfer"
-  sid, rid = msgutil.receive_message(request).encode('utf-8').split(",")
+  sid, rid = msgutil.receive_message(request).encode('utf-8').split(",")  # TODO: JSON
   print "sid: "+ sid + " rid: " + rid
   msgutil.send_message(request, "subscribing to sid: '"+sid+"', rid: '"+ rid +"'")
   s1 = Subscriber(sid, rid)
