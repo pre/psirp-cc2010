@@ -1,0 +1,5 @@
+
+Race conditions:
+- two browsers send the same reservation at once. who should win?
+
+- when executing main_publisher the first received publishment is the last publishment since last execution

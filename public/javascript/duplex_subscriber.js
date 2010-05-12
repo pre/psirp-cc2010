@@ -12,13 +12,21 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid) {
   this.messageElementId = messageElementId;
   
   this.ws.onopen = function() {
+    alert("TODO DONT BUILD JSON BY HAND :/")
+    subscriptionRequest = '{"subscribe": 
+                             {
+                              "sid" : +sid XXX
+                              "rid" : +rid XXX
+                             }
+                            }';
+    debug(subscriptionRequest);
+    this.send(subscriptionRequest);
     debug("connected: "+ rid);
-    this.send(sid +","+ rid); // HACK: comma separated: sid,rid (todo: json)
-    this.send("more from browser");
   };
 
   this.ws.onmessage = function (event) {
     $("#"+messageElementId).append(event.data + "<br />");
+    this.parseResponse(event.data);
   };
 
   this.ws.onclose = function() {
@@ -33,4 +41,12 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid) {
     this.ws.send("Nappia painettiin! Napin arvo: "+ value);
   };
   
+  this.ws.parseResponse = function(data) {
+    try {
+      response = jQuery.parseJSON(data);
+      debug("TODO: handler code for response!")
+    } catch(err) {
+      debug("Error parsing response: " + err);
+    };
+  }
 }

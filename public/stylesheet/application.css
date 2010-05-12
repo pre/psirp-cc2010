@@ -16,13 +16,15 @@ fieldset {
 }
 
 .confirmed {
+  border-color: blue;
+}
+.unconfirmed {
+  border-color: gray;
+}
+
+.unavailable {
   border-color: red;
 }
-
-.unconfirmed {
-  border-color: yellow;
-}
-
 .available {
   border-color: green;
 }
