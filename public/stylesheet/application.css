@@ -4,6 +4,11 @@
   margin: 5px;
   border: 3px black dotted;
   float:  left;
+  cursor: pointer;
+}
+
+.seat:hover {
+  border-style: solid;
 }
 
 fieldset {

@@ -16,9 +16,8 @@
     var subscriber = null;
     var wsAddress = "ws://192.168.2.3:80/duplex_subscriber";
     var sid = "::aa";
-    var rid = "::bb";
-    var messageElementId = "messages"  
-      
+    var messageElementId = "messages";
+    
     window.onload = function() {
       $('.seat').each(function() {
         rid = "::"+ this.id;
@@ -29,14 +28,15 @@
         }
       });
       
-      subscriber = new Subscriber(wsAddress, messageElementId, sid, rid, "a1");
+      messageSubscriber = new Subscriber(wsAddress, messageElementId, sid, "::bb");
+
     }
     
     var Seat = function(sid, rid, domId) {
       this.domId = domId;
       this.sid = sid;
       this.rid = rid;
-      this.seat_subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid, this.domId);
+      this.seat_subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid);
       
       this.toggleStatus = function() {
         this.seat_subscriber.ws.send("Toggled seat status, id: "+ this.domId);
@@ -53,11 +53,14 @@
 
 <h1>Interaction experiment</h1>
 
-<button onclick="subscriber.sendButtonEvent(this.value);" value="value_attr in html!">Et uskalla painaa!</button>
+<button onclick="messageSubscriber.sendButtonEvent(this.value);" value="value_attr in html!">Et uskalla painaa!</button>
 <button onclick="document.getElementById(messageElementId).innerHTML=''">Clear messages</button>
+<button onclick="document.getElementById('debug').innerHTML=''">Clear debug</button>
 
-<h2>Debug</h2>
-<div id="debug"></div>
+<fieldset>
+  <legend>Debug</legend>
+  <div id="debug"></div>
+</fieldset>
 
 <fieldset class="seats">
   <legend>Seats in Theatre X</legend>

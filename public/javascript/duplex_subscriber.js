@@ -1,5 +1,5 @@
 
-var Subscriber = function(wsAddress, messageElementId, sid, rid, subscriberDomId) {
+var Subscriber = function(wsAddress, messageElementId, sid, rid) {
 
   if (!("WebSocket" in window)) {
     alert("Your browser does not support websockets.");
@@ -10,24 +10,23 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, subscriberDomId
   this.sid = sid;
   this.rid = rid;
   this.messageElementId = messageElementId;
-  this.subscriberDomId = subscriberDomId;
   
   this.ws.onopen = function() {
-    debug("connected...");
+    debug("connected: "+ rid);
     this.send(sid +","+ rid); // HACK: comma separated: sid,rid (todo: json)
     this.send("more from browser");
   };
 
   this.ws.onmessage = function (event) {
-    $("#"+messageElementId).append("<p>" + event.data + "</p>");
+    $("#"+messageElementId).append(event.data + "<br />");
   };
 
   this.ws.onclose = function() {
-    debug(" socket closed");
+    debug("disconnected: "+ rid);
   };
 
   function debug(str){
-    $("#debug").append("<p>" +  str);
+    $("#debug").append(str + "<br />");
   };
 
   this.sendButtonEvent = function(value) {

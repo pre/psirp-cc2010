@@ -28,12 +28,16 @@ def web_socket_transfer_data(request):
   sid, rid = msgutil.receive_message(request).encode('utf-8').split(",")  # TODO: JSON
   print "sid: "+ sid + " rid: " + rid
   msgutil.send_message(request, "subscribing to sid: '"+sid+"', rid: '"+ rid +"'")
-  s1 = Subscriber(sid, rid)
+  sub = Subscriber(sid, rid)
   
   duplex = duplex_subscriber(request)
   duplex.start()
+  
+  initial_content = sub.get_initial_content()
+  print "Sending initial content: ", initial_content.buffer
+  msgutil.send_message(request, 'Initial content: %s' % initial_content.buffer)
   while True:
-    for event in s1.listen():
+    for event in sub.listen():
       if event is not None:
         for version in event:
           print('Sending: %s' % version.buffer)
