@@ -52,6 +52,8 @@ class Subscriber(object):
       return sub_s(idtoa(self.sid), idtoa(self.rid))
     except ScopeNotFoundError, e:
       return None
+    except PubNotFoundError, e:
+      return None
     
   def __str__(self):
     val =  "Subscriber:" 
