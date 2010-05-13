@@ -85,9 +85,15 @@ def get_init_handle_event(pskq):
 
 def _main():
     # Some SId/RId pairs
-    sid_rids = ((atoid("99::88"), atoid("ff::ee")),
-                (atoid("88::77"), atoid("ee::dd")),
-                (atoid("88::77"), atoid("dd::cc")))
+    sid_rids = ((atoid("::aa"), atoid("::a1")),
+                (atoid("::aa"), atoid("::a2")),
+                (atoid("::aa"), atoid("::a3")),
+                (atoid("::aa"), atoid("::a4")),
+                (atoid("::aa"), atoid("::a5")),
+                (atoid("::aa"), atoid("::a6")),
+                (atoid("::aa"), atoid("::a7")),
+                (atoid("::aa"), atoid("::a8")),
+                (atoid("::aa"), atoid("::bb")))
     
     # Subscription flags; these are useful for "network subscriptions"
     sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_NET_PERSISTENT
