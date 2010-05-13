@@ -5,8 +5,8 @@ class Subscriber(object):
 	
   def __init__(self, sid, rid):
     self.content = None
-    self.sid = atoid(sid)
-    self.rid = atoid(rid)
+    self.sid = sid
+    self.rid = rid
     # Subscribe only to new publishments
     self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_LOCAL_FUTUREONLY
     self.register_subscription()
@@ -14,10 +14,10 @@ class Subscriber(object):
   def register_subscription(self):
     self.pskq = PubSubKQueue()
     init_handle_event = get_init_handle_event(self.pskq)
-    asd = self.pskq.register_advance_subscription(self.sid, 
-                                                   self.rid, 
-                                                   self.sub_flags, 
-                                                   init_handle_event)
+    asd = self.pskq.register_advance_subscription(atoid(self.sid), 
+                                                  atoid(self.rid), 
+                                                  self.sub_flags, 
+                                                  init_handle_event)
     if isinstance(asd, Publication):
       # In this case the publication already exists - as an
       # example, we here call the initial event handler.
@@ -49,7 +49,7 @@ class Subscriber(object):
   # access get_initial_content().buffer.
   def get_initial_content(self):
     try:
-      return sub_s(idtoa(self.sid), idtoa(self.rid))
+      return sub_s(self.sid, self.rid)
     except ScopeNotFoundError, e:
       return None
     except PubNotFoundError, e:

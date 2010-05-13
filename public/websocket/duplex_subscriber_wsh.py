@@ -61,9 +61,9 @@ def web_socket_do_extra_handshake(request):
 #    subscribe : { sid : "::aa"
 #                  rid : "::bb"
 #                } 
-def web_socket_transfer_data(request):
+
+def initialize_subscriber(request):
   line = msgutil.receive_message(request).encode('utf-8')
-  print line
   try:
     msg = json.loads(line)
     sid = str(msg["subscribe"]["sid"])
@@ -71,16 +71,16 @@ def web_socket_transfer_data(request):
   except ValueError, e:
     msgutil.send_message(request, '%s' % json_message("message", str(e) + " " + line))
     return False
-    
-  print "sid: "+ sid + " rid: " + rid
   msgutil.send_message(request, '%s' % json_message("message", "subscribing to sid: '"+sid+"', rid: '"+ rid +"'"))
-  sub = Subscriber(sid, rid)
+  return Subscriber(sid, rid)
   
+def web_socket_transfer_data(request):
+  sub = initialize_subscriber(request)
   initial_content = sub.get_initial_content()  
   if initial_content is not None:
     msgutil.send_message(request, '%s' % json_message("message", 'Initial content: ' + str(initial_content.buffer)))
   
-  seat_reserver = SeatReserver(request, sid, rid)
+  seat_reserver = SeatReserver(request, sub.sid, sub.rid)
   seat_reserver.start()
  
   while True:
