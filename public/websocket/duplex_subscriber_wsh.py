@@ -48,7 +48,7 @@ class SeatReserver(Thread):
   def act_on(self, msg):
     if msg.get("request") == self.messages['request']['reserve']:
       self.reserve()
-    if msg.get("message") is not None:
+    elif msg.get("message") is not None:
       msg = json_message("message", msg.get("message"))
       print "Publishing message: %s" % msg
       p = Publishment(msg, self.sid, self.rid)  
