@@ -39,8 +39,7 @@ class SeatReserver(Thread):
         msgutil.send_message(self.websocket, '%s' % msg)
         
 #      static_msg = json_message("message", str(line))
-      print "Publishing %s" % line
-      p = Publishment(line, self.sid, self.rid)
+
 #      p.publish(self.sid, self.rid)
 ###      msgutil.send_message(self.websocket, '%s' % static_msg)
 
@@ -48,8 +47,15 @@ class SeatReserver(Thread):
   # PS This should be done in a more clever way... :P
   def act_on(self, msg):
     if msg.get("request") == self.messages['request']['reserve']:
-      self.reserve() 
-  
+      self.reserve()
+    if msg.get("message") is not None:
+      msg = json_message("message", msg.get("message"))
+      print "Publishing message: %s" % msg
+      p = Publishment(msg, self.sid, self.rid)  
+    else:
+      print "Publishing (not matched with commands) %s" % str(msg)
+      
+
   def reserve(self):
     print("reserve, publishing: %s" %  json_message("status", self.messages['status']['confirmed']))
     p = Publishment(json_message("status", self.messages['status']['unavailable']))
