@@ -42,12 +42,13 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
       json_data = jQuery.parseJSON(data);
     } catch(err) {
       debug("Error parsing response: " + err);
+      return;
     };
     
     if ( json_data.response == "SEAT_CONFIRMED" ) {
       caller.confirm();
     }
-    if ( json_data.status != undefined ) {
+    if ( json_data.status == "SEAT_UNAVAILABLE" ) {
       caller.make_unavailable();
     }
     if ( json_data.message != undefined ) {

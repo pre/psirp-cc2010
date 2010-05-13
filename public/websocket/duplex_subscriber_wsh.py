@@ -37,8 +37,8 @@ class SeatReserver(Thread):
         msg = json_message("message", "data is not json: "+ line)
         msgutil.send_message(self.websocket, '%s' % msg)
         
-      static_msg = json_message("message", str(line))
-      p = Publishment(static_msg)
+#      static_msg = json_message("message", str(line))
+      p = Publishment(line)
       p.publish(self.sid, self.rid)
 ###      msgutil.send_message(self.websocket, '%s' % static_msg)
 
@@ -47,7 +47,7 @@ class SeatReserver(Thread):
   def act_on(self, msg):
     if msg.get("request") == self.messages['request']['reserve']:
       self.reserve() 
-      msgutil.send_message(self.websocket, '%s' % json_message("response", self.messages['status']['confirmed']))
+      msgutil.send_message(self.websocket, '%s' % json_message("status", self.messages['status']['confirmed']))
     
 
   
@@ -93,7 +93,8 @@ def web_socket_transfer_data(request):
   subscriber = initialize_subscriber(request)
   initial_content = subscriber.get_initial_content()  
   if initial_content is not None:
-    msgutil.send_message(request, '%s' % json_message("message", 'Initial content: ' + str(initial_content.buffer)))
+    print("Sending initial content: %s" % str(initial_content.buffer))
+    msgutil.send_message(request, '%s' % str(initial_content.buffer))
   
   seat_reserver = SeatReserver(request, subscriber.sid, subscriber.rid)
   seat_reserver.start()
