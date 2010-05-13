@@ -31,22 +31,33 @@
       messageSubscriber = new Subscriber(wsAddress, messageElementId, sid, "::bb");
 
     }
+    function debug(str){
+      $("#debug").append(str + "<br />");
+    };
     
     var Seat = function(sid, rid, domId) {
       this.domId = domId;
       this.sid = sid;
       this.rid = rid;
-      this.seat_subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid);
+      this.subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid, this);
 
       this.reserve = function() {
-        //this.seat_subscriber.ws.send("Toggled seat status, id: "+ this.domId);
+        //this.subscriber.ws.send("Toggled seat status, id: "+ this.domId);
         msg = '{ "request": "SEAT_RESERVATION" }'
-        this.seat_subscriber.ws.send(msg);
+        this.subscriber.ws.send(msg);
         
         $("#"+this.domId).addClass("unconfirmed");
-      }
+      };
       
-    }
+      this.confirm = function() {
+        $("#"+this.domId).removeClass("unconfirmed");
+        $("#"+this.domId).addClass("confirmed");
+      };
+      
+      this.make_unavailable = function() {
+        $("#"+this.domId).addClass("unavailable");
+      };
+    } 
   </script>
 
   
@@ -81,7 +92,7 @@
 </fieldset>
 
 <fieldset>
-  <legend>Received data</legend>
+  <legend>Received messages</legend>
   <div id="messages"></div>
 </fieldset>
 

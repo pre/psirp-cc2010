@@ -1,8 +1,8 @@
 
-var Subscriber = function(wsAddress, messageElementId, sid, rid) {
+var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
 
   if (!("WebSocket" in window)) {
-    alert("Your browser does not support websockets.");
+    debug("Your browser does not support websockets.");
     return;
   };
   
@@ -24,16 +24,11 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid) {
   };
 
   this.ws.onmessage = function (event) {
-    $("#"+messageElementId).append(event.data + "<br />");
     this.parseResponse(event.data);
   };
 
   this.ws.onclose = function() {
     debug("disconnected: "+ rid);
-  };
-
-  function debug(str){
-    $("#debug").append(str + "<br />");
   };
 
   this.sendButtonEvent = function(value) {
@@ -42,11 +37,28 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid) {
   };
   
   this.ws.parseResponse = function(data) {
+    var json_data = null;
     try {
-      response = jQuery.parseJSON(data);
-      debug("TODO: handler code for response!")
+      json_data = jQuery.parseJSON(data);
     } catch(err) {
       debug("Error parsing response: " + err);
     };
-  }
+    
+    if ( json_data.response == "SEAT_CONFIRMED" ) {
+      caller.confirm();
+    }
+    if ( json_data.status != undefined ) {
+      caller.make_unavailable();
+    }
+    if ( json_data.message != undefined ) {
+      this.display_message(json_data.message);
+    }
+    
+    //debug("Unknown response: " + json_data) // FIXME: Howto print json_data contents?
+
+  };
+  
+  this.ws.display_message = function(msg) {
+    $("#"+messageElementId).append(msg + "<br />");
+  };
 }
