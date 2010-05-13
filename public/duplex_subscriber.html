@@ -39,7 +39,7 @@
       this.seat_subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid);
 
       this.reserve = function() {
-        this.seat_subscriber.ws.send("Toggled seat status, id: "+ this.domId);
+        //this.seat_subscriber.ws.send("Toggled seat status, id: "+ this.domId);
         msg = '{ "request": "SEAT_RESERVATION" }'
         this.seat_subscriber.ws.send(msg);
         

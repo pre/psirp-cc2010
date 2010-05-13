@@ -12,12 +12,11 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid) {
   this.messageElementId = messageElementId;
   
   this.ws.onopen = function() {
-    alert("TODO DONT BUILD JSON BY HAND :/")
-    subscriptionRequest = '{"subscribe": 
-                             {
-                              "sid" : +sid XXX
-                              "rid" : +rid XXX
-                             }
+    // How to build json with a generator?
+    subscriptionRequest = '{ "subscribe": { \
+                                "sid" : "' + sid + '", \
+                                "rid" : "' + rid + '" \
+                             } \
                             }';
     debug(subscriptionRequest);
     this.send(subscriptionRequest);
@@ -38,7 +37,8 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid) {
   };
 
   this.sendButtonEvent = function(value) {
-    this.ws.send("Nappia painettiin! Napin arvo: "+ value);
+    msg = '{ "message" : "Nappia painettiin! Napin arvo: '+ value +'" }'
+    this.ws.send(msg);
   };
   
   this.ws.parseResponse = function(data) {

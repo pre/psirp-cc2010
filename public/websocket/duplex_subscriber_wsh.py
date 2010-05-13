@@ -58,18 +58,18 @@ def web_socket_do_extra_handshake(request):
   pass  # Always accept.
 
 # First message must be PSIRP subscription request:
-#   "subscribe" : { "sid" : "::aa"
-#                   "rid" : "::bb"
-#                 } 
+#    subscribe : { sid : "::aa"
+#                  rid : "::bb"
+#                } 
 def web_socket_transfer_data(request):
   line = msgutil.receive_message(request).encode('utf-8')
   print line
   try:
     msg = json.loads(line)
-    sid = msg["subscribe"]["sid"]
-    rid = msg["subscribe"]["rid"]
+    sid = str(msg["subscribe"]["sid"])
+    rid = str(msg["subscribe"]["rid"])
   except ValueError, e:
-    response = json_message("message", "invalid subscription request: "+ line)
+    response = json_message("message", str(e) + " " + line)
     msgutil.send_message(request, '%s' % response)
     return False
     
