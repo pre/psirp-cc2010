@@ -37,11 +37,7 @@ class SeatReserver(Thread):
       except ValueError, e:
         msg = json_message("message", "data is not json: "+ line)
         msgutil.send_message(self.websocket, '%s' % msg)
-        
-#      static_msg = json_message("message", str(line))
 
-#      p.publish(self.sid, self.rid)
-###      msgutil.send_message(self.websocket, '%s' % static_msg)
 
   # Note: Responses are not checked. We only assume that everything is ok. This is only experimental stuff.
   # PS This should be done in a more clever way... :P
@@ -74,7 +70,6 @@ def web_socket_do_extra_handshake(request):
 #    subscribe : { sid : "::aa"
 #                  rid : "::bb"
 #                } 
-
 def initialize_subscriber(request):
   line = msgutil.receive_message(request).encode('utf-8')
   try:

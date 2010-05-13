@@ -8,8 +8,8 @@ class Subscriber(object):
     self.sid = sid
     self.rid = rid
     # Subscribe only to new publishments
-    self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_LOCAL_FUTUREONLY
-    #self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_NET_PERSISTENT
+#    self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_LOCAL_FUTUREONLY
+    self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_NET_PERSISTENT
     self.register_subscription()
 
   def register_subscription(self):

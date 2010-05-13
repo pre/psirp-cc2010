@@ -11,8 +11,20 @@ Unhandled situations in implementation:
 
 
 Something is wrong with advance subscriptions..
-If I publish to a rid which does not yet have content, I don't receive the publishment before something is published again.
-Event_example.py works, but it is does not help, because it does not give an example of how to use handle_event() without global variables. At my project work I would have needed to make the websocket a global variable.
+
+When I subscribe to a RID, I don't get its updates before the second update.
+This might have something to do with combining synchronous and asynchronous
+subscriptions.
+
+Event_example.py works, but it is not helpful, because it does not give an
+example of how to use handle_event() without global variables. At my project
+work I would have needed to make the websocket a global variable.
+
+API does not support requesting a RID's content before entering the listen()
+loop. 
+
+The init_handle_event() method feels like a hack because there is no
+example of how to actually use the received publishment in the caller. The example of doing a print() is not especially useful.
 
 API is confusing at times
  instead of having both
