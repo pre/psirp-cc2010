@@ -57,7 +57,7 @@ def web_socket_do_extra_handshake(request):
   print "Connected."
   pass  # Always accept.
 
-# First message must be PSIRP subscription request:
+# First message must be a PSIRP subscription request:
 #    subscribe : { sid : "::aa"
 #                  rid : "::bb"
 #                } 
@@ -73,19 +73,23 @@ def initialize_subscriber(request):
     return False
   msgutil.send_message(request, '%s' % json_message("message", "subscribing to sid: '"+sid+"', rid: '"+ rid +"'"))
   return Subscriber(sid, rid)
-  
-def web_socket_transfer_data(request):
-  sub = initialize_subscriber(request)
-  initial_content = sub.get_initial_content()  
-  if initial_content is not None:
-    msgutil.send_message(request, '%s' % json_message("message", 'Initial content: ' + str(initial_content.buffer)))
-  
-  seat_reserver = SeatReserver(request, sub.sid, sub.rid)
-  seat_reserver.start()
- 
+
+def listen_psirp_updates(request, subscriber):
   while True:
-    for event in sub.listen():
+    for event in subscriber.listen():
       if event is not None:
         for version in event:
           print('Sending: %s' % version.buffer)
           msgutil.send_message(request, '%s' % json_message("message", str(version.buffer)))
+
+
+def web_socket_transfer_data(request):
+  subscriber = initialize_subscriber(request)
+  initial_content = subscriber.get_initial_content()  
+  if initial_content is not None:
+    msgutil.send_message(request, '%s' % json_message("message", 'Initial content: ' + str(initial_content.buffer)))
+  
+  seat_reserver = SeatReserver(request, subscriber.sid, subscriber.rid)
+  seat_reserver.start()
+
+  listen_psirp_updates(request, subscriber)
