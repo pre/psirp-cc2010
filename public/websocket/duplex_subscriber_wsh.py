@@ -50,8 +50,8 @@ class SeatReserver(Thread):
     print "reserving", rid
     pass
     
-def json_message(type, message):
-  return json.dumps({type : message})
+def json_message(msg_type, message):
+  return json.dumps({msg_type : message})
    
 def web_socket_do_extra_handshake(request):
   print "Connected."
