@@ -94,7 +94,8 @@ def listen_psirp_updates(request, subscriber):
         for version in event:
           print('Sending: %s' % version.buffer)
           msgutil.send_message(request, '%s' % str(version.buffer))
-
+      else:
+        print("Unknown event: %s" % event)
 
 def web_socket_transfer_data(request):
   subscriber = initialize_subscriber(request)

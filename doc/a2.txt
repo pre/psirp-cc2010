@@ -1,5 +1,34 @@
+TODO: 
+dokumentoi protokolla
+ psirppiin vain jsonia
 
-Race conditions:
-- two browsers send the same reservation at once. who should win?
 
-- when executing main_publisher the first received publishment is the last publishment since last execution
+Unhandled situations in implementation:
+
+- escaping of content
+- access control
+- race conditions, eg. two browsers send the same reservation at once. who should win?
+
+
+Something is wrong with advance subscriptions..
+If I publish to a rid which does not yet have content, I don't receive the publishment before something is published again.
+Event_example.py works, but it is does not help, because it does not give an example of how to use handle_event() without global variables. At my project work I would have needed to make the websocket a global variable.
+
+API is confusing at times
+ instead of having both
+   PubSubKQueue#register_advance_subscription
+ and 
+   PubSubKQueue#reg_adv_sub_s
+it would probably be more consistent to have only one method and allow a parameter to define the format of sid&rid.
+
+
+Blackhawk crashes the whole FreeBSD very often. The cause might also be the Python webserver, but the system has crashed also without it.
+
+May 13 18:27:51 blackhawk kernel: Freed UMA keg was not empty (34 items).  Lost 3 pages of memory.
+May 13 18:27:51 blackhawk kernel: psfs: unloaded from 210
+May 13 18:27:51 blackhawk kernel: Warning: memory type psmeta leaked memory on destroy (9 allocations, 576 bytes leak
+ed).
+May 13 18:27:52 blackhawk kernel: WARNING: attempt to net_add_domain(pubsub) after domainfinalize()
+May 13 18:27:52 blackhawk kernel: psfs: loaded at 210
+May 13 18:27:53 blackhawk kernel: ps_obj_get_type: Metadata does not exist!
+May 13 18:27:53 blackhawk kernel: ps_syscall_get_rid: WARNING: attempt to access scope with bad type 1
