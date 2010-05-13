@@ -22,10 +22,14 @@
       $('.seat').each(function() {
         rid = "::"+ this.id;
         this.seat = new Seat(sid, rid, this.id);
+        cancelButton = $('<button class="cancel">Cancel</button>');
+        cancelButton.hide();
+        $("#"+this.id).append(cancelButton);
+
         this.onclick = function() {
           this.seat.reserve();
-          return false;
         }
+
       });
       
       messageSubscriber = new Subscriber(wsAddress, messageElementId, sid, "::bb");
@@ -42,10 +46,8 @@
       this.subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid, this);
 
       this.reserve = function() {
-        //this.subscriber.ws.send("Toggled seat status, id: "+ this.domId);
         msg = '{ "request": "SEAT_RESERVATION" }'
         this.subscriber.ws.send(msg);
-        
         $("#"+this.domId).addClass("unconfirmed");
       };
       
@@ -56,6 +58,7 @@
       
       this.make_unavailable = function() {
         $("#"+this.domId).addClass("unavailable");
+        $("#"+this.domId+" button.cancel").show();
       };
     } 
   </script>
@@ -86,9 +89,9 @@
     REFUGNO9zL0NglAAxPEfdLTs4BZM4DIO4C7OwQg2JoQ9LE1exdlYvBBeZ7jq
     ch9//q1uH4TLzw4d6+ErXMMcXuHWxId3KOETnnXXV6MJpcq2MLaI97CER3N0
     vr4MkhoXe0rZigAAAABJRU5ErkJggg==" alt="Red dot" /></div>
-    <div class="seat" id="a2">image</div>
-    <div class="seat" id="a3">from</div>
-    <div class="seat" id="a4">psirp</div>
+    <div class="seat" id="a2"></div>
+    <div class="seat" id="a3"></div>
+    <div class="seat" id="a4"></div>
 </fieldset>
 
 <fieldset>
