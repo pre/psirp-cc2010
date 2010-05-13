@@ -33,13 +33,15 @@ class SeatReserver(Thread):
       try:
         msg = json.loads(line)
         self.act_on(msg)
+        continue
       except ValueError, e:
         msg = json_message("message", "data is not json: "+ line)
         msgutil.send_message(self.websocket, '%s' % msg)
         
 #      static_msg = json_message("message", str(line))
-      p = Publishment(line)
-      p.publish(self.sid, self.rid)
+      print "Publishing %s" % line
+      p = Publishment(line, self.sid, self.rid)
+#      p.publish(self.sid, self.rid)
 ###      msgutil.send_message(self.websocket, '%s' % static_msg)
 
   # Note: Responses are not checked. We only assume that everything is ok. This is only experimental stuff.
@@ -47,14 +49,13 @@ class SeatReserver(Thread):
   def act_on(self, msg):
     if msg.get("request") == self.messages['request']['reserve']:
       self.reserve() 
-      msgutil.send_message(self.websocket, '%s' % json_message("status", self.messages['status']['confirmed']))
-    
-
   
   def reserve(self):
-    print "reserving", self.rid
+    print("reserve, publishing: %s" %  json_message("status", self.messages['status']['confirmed']))
     p = Publishment(json_message("status", self.messages['status']['unavailable']))
     p.publish(self.sid, self.rid)
+    msgutil.send_message(self.websocket, '%s' % json_message("status", self.messages['status']['confirmed']))
+    
     
 def json_message(msg_type, message):
   return json.dumps({msg_type : message})

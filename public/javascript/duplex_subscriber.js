@@ -18,7 +18,6 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
                                 "rid" : "' + rid + '" \
                              } \
                             }';
-    debug(subscriptionRequest);
     this.send(subscriptionRequest);
     debug("connected: "+ rid);
   };
