@@ -13,7 +13,8 @@ print s1
 
 print "Initial content:"
 ic = s1.get_initial_content()
-print ic.buffer
+if ic is not None:
+  print ic.buffer
 
 print "\nListening for updates:"
 for event in s1.listen():
