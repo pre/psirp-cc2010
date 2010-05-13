@@ -69,8 +69,7 @@ def web_socket_transfer_data(request):
     sid = str(msg["subscribe"]["sid"])
     rid = str(msg["subscribe"]["rid"])
   except ValueError, e:
-    response = json_message("message", str(e) + " " + line)
-    msgutil.send_message(request, '%s' % response)
+    msgutil.send_message(request, '%s' % json_message("message", str(e) + " " + line))
     return False
     
   print "sid: "+ sid + " rid: " + rid
