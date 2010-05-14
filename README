@@ -7,13 +7,22 @@ Experimenting with:
 - Publish-subscribe with HTML5 Websockets.
 - integrating Blackhawk & Websockets.
 
+It would be a tempting idea to store data in the internet without actually
+knowing where the data actually is. This kind of storage method would work for
+"basic" key-value data. The benefit would be not needing a central master data
+server because the data would be distributed by nature.
+
+It is known beforehand that PSIRP cannot be reliably used as a key-value store
+because it is not designed to be one. This experiment tests, however, PSIRP's
+abilities to work as a distributed key-value server.
+
 
 USAGE PREREQUISITES
 ===================
 
 - Blackhawk prototype (www.psirp.org)
 - Networking support in virtual machine
-- Browser support for Websockets, currently only 
+- Browser support for Websockets, currently 
   Google Chrome or WebKit nightly-build
 
 
@@ -32,3 +41,63 @@ USAGE
    % ./main_publisher.py
 
 --> You should see updates in the browser.
+
+
+CONCEPT
+=======
+
+Websocket reads JSON which is basically in format '{ command: value }'.
+PSIRP is used as a key-value data store. 
+Data is stored in above mentioned JSON format to PSIRP.
+
+Problems:
+
+- PSIRP does not support any data handling operations for this kind of data.   
+  You cannot reliably implement data handling in client code because of race
+  conditions. For example, two browsers send the same reservation at once. who
+  should win?
+  
+
+- Programming websockets without a proper framework is hard and error-prone.
+  This applies to the server side and the browser side.
+
+- Content is not escaped at all (because of the nature of this experiment)
+
+- There is no access control (see above)
+
+
+OBSERVATIONS
+============
+
+Something is wrong with my Subscriber code:
+When I subscribe to a RID, I don't get its updates before the second update.
+- When the first object is published, subscriber receives the Blackhawk's kevent, but it is a "None" object.
+- When the second object is published, subscriber receives the first object and only after that the second object.
+
+Event_example.py works correctly, but it is not helpful, because it does not
+give an example of how to use handle_event() without global variables. At my
+project work I would have needed to make the websocket a global variable,
+which I did not want to do.
+
+API does not support requesting a RID's content before entering the listen()
+loop. If I just want the content before looping, the most practical way of achieving this seems to be a synchronous one-time subscription.
+
+The init_handle_event() method feels like a hack because there is no example
+of how to actually use the received publishment in the caller. The example of
+doing a print() is not especially useful. API should support e.g. yielding the
+response in order for the caller to implement the handling code. Then we would
+not need handle_event() at all.
+
+API is confusing at times
+ instead of having both
+   PubSubKQueue#register_advance_subscription
+ and 
+   PubSubKQueue#reg_adv_sub_s
+it would probably be more consistent to have only one method and allow a parameter to define the format of sid&rid.
+
+
+CRASHES
+=======
+
+Blackhawk crashes the whole FreeBSD on average once per hour. See doc/crash_imgs for details.
+
