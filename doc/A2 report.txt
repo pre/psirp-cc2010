@@ -10,13 +10,16 @@ Unhandled situations in implementation:
 - race conditions, eg. two browsers send the same reservation at once. who should win?
 
 
-Something is wrong with advance subscriptions..
+Something is wrong with my Subscriber code:
 
 When I subscribe to a RID, I don't get its updates before the second update.
-The Blackhawk's kevent is received, but it is a "None" object.
-Event_example.py works, but it is not helpful, because it does not give an
-example of how to use handle_event() without global variables. At my project
-work I would have needed to make the websocket a global variable, which I did not want to do.
+- When the first object is published, subscriber receives the Blackhawk's kevent, but it is a "None" object.
+- When the second object is published, subscriber receives the first object and only after that the second object.
+
+Event_example.py works correctly, but it is not helpful, because it does not
+give an example of how to use handle_event() without global variables. At my
+project work I would have needed to make the websocket a global variable,
+which I did not want to do.
 
 API does not support requesting a RID's content before entering the listen()
 loop. If I just want the content before looping, the most practical way of achieving this seems to be a synchronous one-time subscription.
@@ -38,8 +41,5 @@ it would probably be more consistent to have only one method and allow a paramet
 CRASHES
 =======
 
-Blackhawk crashes the whole FreeBSD very often. The cause might also be the Python webserver, but the system has crashed also without it.
+Blackhawk crashes the whole FreeBSD on average once per hour. See doc/crash_imgs for details.
 
-See doc/crash_imgs for details.
-
-Try issuing "unloadps && loadps": Usually the whole FreeBSD system will crash.
