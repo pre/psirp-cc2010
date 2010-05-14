@@ -1,0 +1,45 @@
+TODO: 
+dokumentoi protokolla
+ psirppiin vain jsonia
+
+
+Unhandled situations in implementation:
+
+- escaping of content
+- access control
+- race conditions, eg. two browsers send the same reservation at once. who should win?
+
+
+Something is wrong with advance subscriptions..
+
+When I subscribe to a RID, I don't get its updates before the second update.
+The Blackhawk's kevent is received, but it is a "None" object.
+Event_example.py works, but it is not helpful, because it does not give an
+example of how to use handle_event() without global variables. At my project
+work I would have needed to make the websocket a global variable, which I did not want to do.
+
+API does not support requesting a RID's content before entering the listen()
+loop. If I just want the content before looping, the most practical way of achieving this seems to be a synchronous one-time subscription.
+
+The init_handle_event() method feels like a hack because there is no example
+of how to actually use the received publishment in the caller. The example of
+doing a print() is not especially useful. API should support e.g. yielding the
+response in order for the caller to implement the handling code. Then we would
+not need handle_event() at all.
+
+API is confusing at times
+ instead of having both
+   PubSubKQueue#register_advance_subscription
+ and 
+   PubSubKQueue#reg_adv_sub_s
+it would probably be more consistent to have only one method and allow a parameter to define the format of sid&rid.
+
+
+CRASHES
+=======
+
+Blackhawk crashes the whole FreeBSD very often. The cause might also be the Python webserver, but the system has crashed also without it.
+
+See doc/crash_imgs for details.
+
+Try issuing "unloadps && loadps": Usually the whole FreeBSD system will crash.
