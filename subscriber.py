@@ -8,8 +8,8 @@ class Subscriber(object):
     self.sid = sid
     self.rid = rid
     # Subscribe only to new publishments
-#    self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_LOCAL_FUTUREONLY
-    self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_NET_PERSISTENT
+    self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_LOCAL_FUTUREONLY
+#    self.sub_flags = PS_FLAGS_LOCAL_NETSUB|PS_FLAGS_NET_PERSISTENT
     self.register_subscription()
 
   def register_subscription(self):
@@ -27,6 +27,10 @@ class Subscriber(object):
 
   # Loop copied from PubSubKQueue#listen_and_handle()  
   # and modified to yield return value for output processing.
+  #
+  # FIXME: For some reason advance subscription does not work. 
+  #        If publication does not exist when subscribing, the first publishment
+  #        results in PubNotFoundError - and the subscriber won't get any content.
   def listen(self):
     try:
       while True:
@@ -37,9 +41,12 @@ class Subscriber(object):
           raise PubSubTimeoutException("Timeout")
         for ev, pub in evpubl:
           try:
-            yield(pub.handle_event(ev, pub))
-          except Exception, e:
-            exc_handler(e)
+            for version in pub.get_versions_since_saved_index():
+              yield(version)
+          except PubNotFoundError:
+            yield(None)
+#          except Exception, e:
+#            exc_handler(e)
 
     except KeyboardInterrupt:
       # E.g. ^C pressed

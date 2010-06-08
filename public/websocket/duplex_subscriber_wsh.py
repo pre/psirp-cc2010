@@ -53,7 +53,7 @@ class SeatReserver(Thread):
       
 
   def reserve(self):
-    print("reserve, publishing: %s" %  json_message("status", self.messages['status']['confirmed']))
+    print("Publishing status: %s" %  json_message("status", self.messages['status']['confirmed']))
     p = Publishment(json_message("status", self.messages['status']['unavailable']))
     p.publish(self.sid, self.rid)
     msgutil.send_message(self.websocket, '%s' % json_message("status", self.messages['status']['confirmed']))
@@ -81,16 +81,17 @@ def initialize_subscriber(request):
     return False
   msgutil.send_message(request, '%s' % json_message("message", "subscribing to sid: '"+sid+"', rid: '"+ rid +"'"))
   return Subscriber(sid, rid)
+  
 
 def listen_psirp_updates(request, subscriber):
   while True:
-    for event in subscriber.listen():
-      if event is not None:
-        for version in event:
-          print('Sending: %s' % version.buffer)
-          msgutil.send_message(request, '%s' % str(version.buffer))
+    for version in subscriber.listen():
+      if version is not None: # if publication exists
+        print('Sending: %s' % version.buffer)
+        msgutil.send_message(request, '%s' % str(version.buffer))
       else:
-        print("Unknown event: %s" % event)
+        print("Received Publishment was null :(")
+
 
 def web_socket_transfer_data(request):
   subscriber = initialize_subscriber(request)

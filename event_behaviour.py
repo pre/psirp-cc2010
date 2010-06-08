@@ -20,6 +20,7 @@ def handle_event(event, pub):
     # the subscribed version's index minus 1. The saved index is then
     # updated to the current index of pub in the call below.
     for version in pub.get_versions_since_saved_index():
+      print "FIXME: You should not get into handle_event()"
       yield(version)
 #        print("First %d bytes of version %s of %s:\n%s\n"
 #              % (MAX_PRINT_LEN, version.vridstr, idstoa(pub.sid, pub.rid),
