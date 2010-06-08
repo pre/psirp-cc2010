@@ -20,13 +20,36 @@
 
     window.onload = function() {
       $('.seat').each(function() {
-        rid = "::"+ this.id;
-        this.seat = new Seat(sid, rid, this.id);
+        this.rid = "::"+ this.id;
+        this.seat = new Seat(sid, this.rid, this.id);
 
-        this.onclick = function() {
-                this.seat.reserve();
+        
+        $(this).append('<img class="reservation click" src="images/reserve.png">');
+        $(this).append('<img class="reserved click" src="images/reserved.png">');
+        $(this).append(
+           "<ul>"
+          +  "<li>Reserved at 6.7.2010 20:30</li>"
+          +  "<li>by Peke Vaara</li>"
+          + "</ul>");
+        $(this).append('<button class="cancel click">Cancel reservation</button>');
+        
+        this.testi = function() {
+          alert("this" + this.rid);
         }
+        
+        // this.onclick = function() {
+        //   alert("div")
+        //         // this.seat.reserve();
+        // }
       
+      });
+      
+      $('.seat img.reservation').live('click', function() {
+        $(this).parent()[0].seat.reserve();
+      });
+      
+      $('.seat button.cancel').live('click', function() {
+        $(this).parent()[0].seat.cancel();
       });
       
       messageSubscriber = new Subscriber(wsAddress, messageElementId, sid, "::bb");
@@ -43,20 +66,47 @@
       this.subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid, this);
 
       this.reserve = function() {
-        msg = '{ "request": "SEAT_RESERVATION" }'
-        this.subscriber.ws.send(msg);
+        this.subscriber.request("SEAT_RESERVATION");
         $("#"+this.domId).addClass("unconfirmed");
       };
       
       this.confirm = function() {
         $("#"+this.domId).removeClass("unconfirmed");
         $("#"+this.domId).addClass("confirmed");
+        $("#"+this.domId+" img.confirmed").show();
       };
       
+      /* NB. Since all application logic is in JavaScript, it is easily bypassed.
+       *     Of course you can manually call cancel() function and bypass "security",
+       *     but that is not the point here.
+       *
+       *     Now we depend on the caller to check that I am allowed to call this method.
+       */
+      this.cancel = function() {
+        this.subscriber.request("SEAT_CANCELLATION");
+        $("#"+this.domId).removeClass("unavailable");
+        $("#"+this.domId).addClass("available");
+        
+      }
+      
       this.make_unavailable = function() {
+        $("#"+this.domId).removeClass("available");
         $("#"+this.domId).addClass("unavailable");
         $("#"+this.domId+" button.cancel").show();
+        $("#"+this.domId+" img.reservation").hide();
+        $("#"+this.domId+" img.reserved").show();
       };
+
+      this.make_available = function() {
+        $("#"+this.domId).removeClass("unavailable");
+        $("#"+this.domId).addClass("available");
+        $("#"+this.domId+" button.cancel").hide();
+        $("#"+this.domId+" img.reservation").show();
+        $("#"+this.domId+" img.reserved").hide();
+        
+      };
+      
+      
     } 
   </script>
 

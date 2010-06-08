@@ -1,17 +1,20 @@
 .seat {
-  width:  70px;
-  height: 70px;
+  width:  200px;
+  height: 200px;
   margin: 5px;
   padding: 5px;
   text-align: center;
   border: 3px black dotted;
   float:  left;
+}
+
+.click {
   cursor: pointer;
 }
 
-.seat:hover {
+/*.seat:hover {
   border-style: solid;
-}
+}*/
 
 fieldset {
   clear:  both;

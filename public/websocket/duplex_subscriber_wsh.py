@@ -17,7 +17,7 @@ class SeatReserver(Thread):
     self.rid = rid
     self.messages = {"request": {
                         "reserve": "SEAT_RESERVATION",
-                        "cancel" : "SEAT_CANCEL"
+                        "cancel" : "SEAT_CANCELLATION"
                       },
                      "status": {
                          "unavailable" : "SEAT_UNAVAILABLE",
@@ -39,11 +39,13 @@ class SeatReserver(Thread):
         msgutil.send_message(self.websocket, '%s' % msg)
 
 
-  # Note: Responses are not checked. We only assume that everything is ok. This is only experimental stuff.
-  # PS This should be done in a more clever way... :P
+  # Note: Responses are not checked. We only assume that everything is ok.
+  # PS Message parsing should be done in a more clever way... :P
   def act_on(self, msg):
     if msg.get("request") == self.messages['request']['reserve']:
       self.reserve()
+    if msg.get("request") == self.messages['request']['cancel']:
+      self.cancel()
     elif msg.get("message") is not None:
       msg = json_message("message", msg.get("message"))
       print "Publishing message: %s" % msg
@@ -53,10 +55,24 @@ class SeatReserver(Thread):
       
 
   def reserve(self):
-    print("Publishing status: %s" %  json_message("status", self.messages['status']['confirmed']))
-    p = Publishment(json_message("status", self.messages['status']['unavailable']))
+    self.publish_status('unavailable')
+    self.send_status('confirmed')
+
+    
+  def cancel(self):
+    self.publish_status('available')
+    self.send_status('available')
+
+    
+  def publish_status(self, status):
+    """Publish status to Blackhawk"""
+    print("Publishing status: %s" %  json_message("status", self.messages['status'][status]))
+    p = Publishment(json_message("status", self.messages['status'][status]))
     p.publish(self.sid, self.rid)
-    msgutil.send_message(self.websocket, '%s' % json_message("status", self.messages['status']['confirmed']))
+
+  def send_status(self, status):
+    """Send status to websocket"""
+    msgutil.send_message(self.websocket, '%s' % json_message("status", self.messages['status'][status]))
     
     
 def json_message(msg_type, message):

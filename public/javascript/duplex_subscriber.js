@@ -50,6 +50,9 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
     if ( json_data.status == "SEAT_UNAVAILABLE" ) {
       caller.make_unavailable();
     }
+    if ( json_data.status == "SEAT_AVAILABLE" ) {
+      caller.make_available();
+    }
     if ( json_data.message != undefined ) {
       this.display_message(json_data.message);
     }
@@ -61,4 +64,10 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
   this.ws.display_message = function(msg) {
     $("#"+messageElementId).append(msg + "<br />");
   };
+  
+  this.request = function(msg) {
+    msg = '{ "request": "'+ msg +'" }'
+    this.ws.send(msg);
+  };
+  
 }
