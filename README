@@ -30,14 +30,16 @@ USAGE
 =====
 
 1) Ensure that nobody else than you have access to your virtual machine's ip.
-2) Start web server as root (root is required for Blackhawk access):
+2) Load Blackhawk: 
+   % loadps
+3) Start web server as root (root is required for Blackhawk access):
    % ./start_server.sh
-3) Configure your virtual machine ip to the HTML file you are testing, e.g.
+4) Configure your virtual machine ip to the HTML file you are testing, e.g.
    var wsAddress = "ws://192.168.2.3:80/subscriber";
    in file public/subscriber.html
-4) Direct your web browser to e.g. http://192.168.2.3/subscriber.html
+5) Direct your web browser to e.g. http://192.168.2.3/subscriber.html
    You may open several windows to see pubsub in action.
-5) Publish data with
+6) Publish data with
    % ./main_publisher.py
 
 --> You should see updates in the browser.
@@ -72,7 +74,7 @@ OBSERVATIONS
 Something is wrong with my Subscriber code:
 When I subscribe to a RID, I don't get its updates before the second update.
 - When the first object is published, subscriber receives the Blackhawk's kevent, but it is a "None" object.
-- When the second object is published, subscriber receives the first object and only after that the second object.
+- When the second object is published, subscriber receives the previously published object and only after that the second object. This has something to do with publishment "version index" being -1 in the beginning.
 
 Event_example.py works correctly, but it is not helpful, because it does not
 give an example of how to use handle_event() without global variables. At my
