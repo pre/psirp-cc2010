@@ -19,7 +19,7 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
                              } \
                             }';
     this.send(subscriptionRequest);
-    debug("connected: "+ rid);
+    //debug("connected: "+ rid);
   };
 
   this.ws.onmessage = function (event) {
@@ -28,11 +28,6 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
 
   this.ws.onclose = function() {
     debug("disconnected: "+ rid);
-  };
-
-  this.sendButtonEvent = function(value) {
-    msg = '{ "message" : "Button was clicked! Its value: '+ value +'" }'
-    this.ws.send(msg);
   };
   
   this.ws.parseResponse = function(data) {
@@ -64,8 +59,13 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
   this.ws.display_message = function(msg) {
     $("#"+messageElementId).append(msg + "<br />");
   };
+
+  this.sendMessage = function(value) {
+    msg = '{ "message" : "'+ value +'" }'
+    this.ws.send(msg);
+  };
   
-  this.request = function(msg) {
+  this.sendRequest = function(msg) {
     msg = '{ "request": "'+ msg +'" }'
     this.ws.send(msg);
   };

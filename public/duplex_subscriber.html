@@ -25,16 +25,21 @@
 
         
         $(this).append('<img class="reservation click" src="images/reserve.png">');
-        $(this).append('<img class="reserved click" src="images/reserved.png">');
+        $(this).append('<img class="reserved" src="images/reserved.png">');
+        $(this).append('<img class="confirmed" src="images/my_reservation.png">');
         $(this).append(
            "<ul>"
-          +  "<li>Reserved at 6.7.2010 20:30</li>"
-          +  "<li>by Peke Vaara</li>"
+          +  "<li class='reserved-at'>Reserved at 6.7.2010 20:30</li>"
+          +  "<li class='reserved-by'>Peke Vaara</li>"
           + "</ul>");
         $(this).append('<button class="cancel click">Cancel reservation</button>');
         
         this.testi = function() {
           alert("this" + this.rid);
+        }
+        
+        this.reserverName = function() {
+          return $("#"+this.id +" .reserved-by").html();
         }
         
         // this.onclick = function() {
@@ -55,9 +60,30 @@
       messageSubscriber = new Subscriber(wsAddress, messageElementId, sid, "::bb");
 
     }
-    function debug(str){
+    function debug(str) {
       $("#debug").append(str + "<br />");
     };
+    
+    function markMyReservations(name) {
+      $('.seat').each(function() {
+        if (this.reserverName() == name) {
+          this.seat.confirm();
+        }
+      });
+    };
+    
+    function myName() {
+      return $('#username').val();
+    }
+    
+    function announceMyPrecense() {
+      if (myName() == "") {
+        alert("Fill in your name first.");
+        return;
+      }
+      
+      messageSubscriber.sendMessage(myName() + " has come to get some seats!");
+    }
     
     var Seat = function(sid, rid, domId) {
       this.domId = domId;
@@ -66,7 +92,11 @@
       this.subscriber = new Subscriber(wsAddress, messageElementId, this.sid, this.rid, this);
 
       this.reserve = function() {
-        this.subscriber.request("SEAT_RESERVATION");
+        if (document.getElementById("username").value == "") {
+          alert("Fill in your name first.");
+          return;
+        }
+        this.subscriber.sendRequest("SEAT_RESERVATION");
         $("#"+this.domId).addClass("unconfirmed");
       };
       
@@ -74,6 +104,8 @@
         $("#"+this.domId).removeClass("unconfirmed");
         $("#"+this.domId).addClass("confirmed");
         $("#"+this.domId+" img.confirmed").show();
+        $("#"+this.domId+" img.reserved").hide();
+        
       };
       
       /* NB. Since all application logic is in JavaScript, it is easily bypassed.
@@ -83,7 +115,7 @@
        *     Now we depend on the caller to check that I am allowed to call this method.
        */
       this.cancel = function() {
-        this.subscriber.request("SEAT_CANCELLATION");
+        this.subscriber.sendRequest("SEAT_CANCELLATION");
         $("#"+this.domId).removeClass("unavailable");
         $("#"+this.domId).addClass("available");
         
@@ -119,14 +151,12 @@
 <!-- <p>Nothing is escaped in received content!</p> -->
 <p>Reserving a Theater Seat. <br/>Black seat is available, red seat is reserved.</p>
 
-<button onclick="messageSubscriber.sendButtonEvent(this.value);" value="I'm html-attribute's value">Don't you to click!</button>
-<button onclick="document.getElementById(messageElementId).innerHTML=''">Clear messages</button>
-<button onclick="document.getElementById('debug').innerHTML=''">Clear debug</button>
 
-<fieldset>
-  <legend>Debug</legend>
-  <div id="debug"></div>
-</fieldset>
+<label for="username">My name is:</label>
+<input name="username" id="username" onblur="markMyReservations(this.value);">
+
+
+<button onclick="announceMyPrecense();">Annonounce me!</button>
 
 <fieldset class="seats">
   <legend>Seats in Theatre X</legend>
@@ -136,6 +166,14 @@
     <div class="seat" id="a4"></div>
     <div class="seat" id="a5"></div>
     <div class="seat" id="a6"></div>
+</fieldset>
+
+<button onclick="document.getElementById(messageElementId).innerHTML=''">Clear messages</button>
+<button onclick="document.getElementById('debug').innerHTML=''">Clear debug</button>
+
+<fieldset>
+  <legend>Debug</legend>
+  <div id="debug"></div>
 </fieldset>
 
 <fieldset>

@@ -95,7 +95,7 @@ def initialize_subscriber(request):
   except ValueError, e:
     msgutil.send_message(request, '%s' % json_message("message", str(e) + " " + line))
     return False
-  msgutil.send_message(request, '%s' % json_message("message", "subscribing to sid: '"+sid+"', rid: '"+ rid +"'"))
+  #msgutil.send_message(request, '%s' % json_message("message", "subscribing to sid: '"+sid+"', rid: '"+ rid +"'"))
   return Subscriber(sid, rid)
   
 
