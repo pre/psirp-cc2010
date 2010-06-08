@@ -66,9 +66,10 @@
 <body>
 
 <h1>Interaction experiment</h1>
-<p>Nothing is escaped in received content!</p>
+<!-- <p>Nothing is escaped in received content!</p> -->
+<p>Reserving a Theater Seat. <br/>Black seat is available, red seat is reserved.</p>
 
-<button onclick="messageSubscriber.sendButtonEvent(this.value);" value="value_attr in html!">Et uskalla painaa!</button>
+<button onclick="messageSubscriber.sendButtonEvent(this.value);" value="I'm html-attribute's value">Don't you to click!</button>
 <button onclick="document.getElementById(messageElementId).innerHTML=''">Clear messages</button>
 <button onclick="document.getElementById('debug').innerHTML=''">Clear debug</button>
 
@@ -85,7 +86,6 @@
     <div class="seat" id="a4"></div>
     <div class="seat" id="a5"></div>
     <div class="seat" id="a6"></div>
-    <div class="seat" id="a7"></div>
 </fieldset>
 
 <fieldset>

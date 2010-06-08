@@ -31,7 +31,7 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
   };
 
   this.sendButtonEvent = function(value) {
-    msg = '{ "message" : "Nappia painettiin! Napin arvo: '+ value +'" }'
+    msg = '{ "message" : "Button was clicked! Its value: '+ value +'" }'
     this.ws.send(msg);
   };
   
