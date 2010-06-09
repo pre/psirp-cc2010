@@ -3,7 +3,7 @@ from subscriber import *
 from publishment import *
 
 from threading import Thread
-from time import gmtime, strftime
+from time import gmtime, strftime, localtime
 
 import os
 import re
@@ -85,7 +85,7 @@ class SeatReserver(Thread):
     if reserver_name is not None:
       params = {}
       params['reservedBy'] = reserver_name
-      params['reservedAt'] = strftime("%a, %d %b %Y %H:%M:%S +0000", time.localtime())
+      params['reservedAt'] = strftime("%a, %d %b %Y %H:%M:%S", localtime())
       
     return json_message("status", self.messages['status'][status], params)
     

@@ -132,7 +132,7 @@ var Seat = function(sid, rid, domId, reserver) {
     $("#"+this.domId+" img.reservation").show();
     $("#"+this.domId+" img.reserved").hide();
     $("#"+this.domId+" img.confirmed").hide();
-//    $("#"+this.domId+" ul.reservation-details").hide();
+    $("#"+this.domId+" ul.reservation-details").hide();
   };
   
 }
