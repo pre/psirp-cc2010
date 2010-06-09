@@ -4,7 +4,7 @@
   margin: 5px;
   padding: 5px;
   text-align: center;
-  border: 3px black dotted;
+  border: 2px black dotted;
   float:  left;
 }
 
@@ -21,7 +21,7 @@ fieldset {
 }
 
 .confirmed {
-  border-color: blue;
+  border-color: green;
 }
 .unconfirmed {
   border-color: gray;
