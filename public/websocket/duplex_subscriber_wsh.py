@@ -3,6 +3,8 @@ from subscriber import *
 from publishment import *
 
 from threading import Thread
+from time import gmtime, strftime
+
 import os
 import re
 import sys
@@ -43,20 +45,22 @@ class SeatReserver(Thread):
   # PS Message parsing should be done in a more clever way... :P
   def act_on(self, msg):
     if msg.get("request") == self.messages['request']['reserve']:
-      self.reserve()
-    if msg.get("request") == self.messages['request']['cancel']:
+      self.reserve(msg.get("reservedBy"))
+    elif msg.get("request") == self.messages['request']['cancel']:
       self.cancel()
     elif msg.get("message") is not None:
       msg = json_message("message", msg.get("message"))
       print "Publishing message: %s" % msg
       p = Publishment(msg, self.sid, self.rid)  
     else:
-      print "Publishing (not matched with commands) %s" % str(msg)
+      print "Not matched with commands (not doing anything): %s" % str(msg)
       
 
-  def reserve(self):
-    self.publish_status('unavailable')
-    self.send_status('confirmed')
+  def reserve(self, reserver_name):
+    self.publish_status('unavailable', reserver_name)
+    # BUG: SEAT_UNAVAILABLE is sent immediately after this.
+    #      There should be a way to make a difference between user's own publishments.
+    self.send_status('confirmed', reserver_name) 
 
     
   def cancel(self):
@@ -64,19 +68,34 @@ class SeatReserver(Thread):
     self.send_status('available')
 
     
-  def publish_status(self, status):
+  def publish_status(self, status, reserver_name = None):
     """Publish status to Blackhawk"""
-    print("Publishing status: %s" %  json_message("status", self.messages['status'][status]))
-    p = Publishment(json_message("status", self.messages['status'][status]))
-    p.publish(self.sid, self.rid)
+    new_status = self.generate_status(status, reserver_name)
+    print("Publishing status: %s" % new_status)
+    p = Publishment(new_status, self.sid, self.rid)
 
-  def send_status(self, status):
+  def send_status(self, status, reserver_name = None):
     """Send status to websocket"""
-    msgutil.send_message(self.websocket, '%s' % json_message("status", self.messages['status'][status]))
+    new_status = self.generate_status(status, reserver_name)
+    print("Sending status: %s" % new_status)
+    msgutil.send_message(self.websocket, '%s' % new_status)
     
+  def generate_status(self, status, reserver_name):
+    params = None
+    if reserver_name is not None:
+      params = {}
+      params['reservedBy'] = reserver_name
+      params['reservedAt'] = strftime("%a, %d %b %Y %H:%M:%S +0000", time.localtime())
+      
+    return json_message("status", self.messages['status'][status], params)
     
-def json_message(msg_type, message):
-  return json.dumps({msg_type : message})
+def json_message(msg_type, message, params = None):
+  message = {msg_type : message}
+  if params is not None:
+    for key in params:
+      message[key] = params[key]
+      
+  return json.dumps(message)
    
 def web_socket_do_extra_handshake(request):
   print "Connected."
@@ -103,7 +122,7 @@ def listen_psirp_updates(request, subscriber):
   while True:
     for version in subscriber.listen():
       if version is not None: # if publication exists
-        print('Sending: %s' % version.buffer)
+        print('Sending from Blackhawk: %s' % version.buffer)
         msgutil.send_message(request, '%s' % str(version.buffer))
       else:
         print("Received Publishment was null :(")

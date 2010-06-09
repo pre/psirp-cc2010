@@ -41,9 +41,10 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
     
     if ( json_data.response == "SEAT_CONFIRMED" ) {
       caller.confirm();
+      alert("mun varaus")
     }
     if ( json_data.status == "SEAT_UNAVAILABLE" ) {
-      caller.make_unavailable();
+      caller.make_unavailable(json_data.reservedBy, json_data.reservedAt);
     }
     if ( json_data.status == "SEAT_AVAILABLE" ) {
       caller.make_available();
@@ -65,8 +66,14 @@ var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
     this.ws.send(msg);
   };
   
-  this.sendRequest = function(msg) {
-    msg = '{ "request": "'+ msg +'" }'
+  // FIXME: Find a better way to create json string :P
+  this.sendRequest = function(msg, reserverName) {
+    requestString  = '"request": "'+ msg +'"';
+    reserverString = "";
+    if (reserverName != null) {
+      reserverString = ', "reservedBy": "'+ reserverName +'"';
+    }      
+    msg = '{ '+ requestString + reserverString +' }';
     this.ws.send(msg);
   };
   

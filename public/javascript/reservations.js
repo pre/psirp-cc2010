@@ -11,9 +11,9 @@ window.onload = function() {
     $(this).append('<img class="reserved" src="images/reserved.png">');
     $(this).append('<img class="confirmed" src="images/my_reservation.png">');
     $(this).append(
-       "<ul>"
-      +  "<li class='reserved-at'>Reserved at 6.7.2010 20:30</li>"
+       "<ul class='reservation-details'>"
       +  "<li class='reserved-by'>Peke Vaara</li>"
+      +  "<li class='reserved-at easydate'>Wed, 09 Jun 2010 06:42:23 -0700</li>"
       + "</ul>");
     $(this).append('<button class="cancel click">Cancel reservation</button>');
 
@@ -55,11 +55,17 @@ var Reserver = function() {
   
   this.markReservations = function() {
     $('.seat').each(function() {
-      if (this.seat.reserverName() == reserver.name()) {
-        this.seat.confirm();
-      }
+      reserver.markReservation(this);
     });
   };
+  
+  this.markReservation = function(seatElement) {
+    $(seatElement).each(function() {
+      if (this.seat.reserverName() == reserver.name()) {
+        this.seat.confirm();
+      }      
+    });
+  }
   
 }
 
@@ -75,7 +81,7 @@ var Seat = function(sid, rid, domId, reserver) {
       alert("Fill in your name first.");
       return;
     }
-    this.subscriber.sendRequest("SEAT_RESERVATION");
+    this.subscriber.sendRequest("SEAT_RESERVATION", this.reserver.name());
     $("#"+this.domId).addClass("unconfirmed");
   };
   
@@ -102,15 +108,21 @@ var Seat = function(sid, rid, domId, reserver) {
     this.subscriber.sendRequest("SEAT_CANCELLATION");
     $("#"+this.domId).removeClass("unavailable");
     $("#"+this.domId).addClass("available");
+    $("#"+this.domId+" ul.reservation-details").hide();
     
   }
   
-  this.make_unavailable = function() {
+  this.make_unavailable = function(reservedBy, reservedAt) {
     $("#"+this.domId).removeClass("available");
     $("#"+this.domId).addClass("unavailable");
     $("#"+this.domId+" button.cancel").show();
     $("#"+this.domId+" img.reservation").hide();
+    $("#"+this.domId+" img.confirmed").hide();
     $("#"+this.domId+" img.reserved").show();
+    $("#"+this.domId+" ul.reservation-details").show();
+    $("#"+this.domId+" li.reserved-by").html(reservedBy);
+    $("#"+this.domId+" li.reserved-at").html(reservedAt);
+    reserver.markReservation("#"+this.domId);
   };
 
   this.make_available = function() {
@@ -119,8 +131,8 @@ var Seat = function(sid, rid, domId, reserver) {
     $("#"+this.domId+" button.cancel").hide();
     $("#"+this.domId+" img.reservation").show();
     $("#"+this.domId+" img.reserved").hide();
-    
+    $("#"+this.domId+" img.confirmed").hide();
+//    $("#"+this.domId+" ul.reservation-details").hide();
   };
-  
   
 }
