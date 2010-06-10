@@ -6,10 +6,11 @@ window.onload = function() {
     this.rid = "::"+ this.id;
     this.seat = new Seat(sid, this.rid, this.id, reserver);
 
+    // Images are downloaded from Blackhawk by image.py gateway.
+    $(this).append('<img class="reservation click" src="/cgi/image.py?c1">');
+    $(this).append('<img class="reserved" src="/cgi/image.py?c2">');
+    $(this).append('<img class="confirmed" src="/cgi/image.py?c3">');
     
-    $(this).append('<img class="reservation click" src="images/reserve.png">');
-    $(this).append('<img class="reserved" src="images/reserved.png">');
-    $(this).append('<img class="confirmed" src="images/my_reservation.png">');
     $(this).append(
        "<ul class='reservation-details'>"
       +  "<li class='reserved-by'>Peke Vaara</li>"

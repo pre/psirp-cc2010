@@ -122,7 +122,7 @@ def listen_psirp_updates(request, subscriber):
   while True:
     for version in subscriber.listen():
       if version is not None: # if publication exists
-        print('Sending from Blackhawk: %s' % version.buffer)
+        print('Sending from Blackhawk: %s' % str(version.buffer))
         msgutil.send_message(request, '%s' % str(version.buffer))
       else:
         print("Received Publishment was null :(")

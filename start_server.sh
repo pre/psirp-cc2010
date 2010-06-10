@@ -11,4 +11,4 @@ python2.6 _initialize_web_publishments.py
 
 echo "Starting server"
 cd mod_pywebsocket && \
-python2.6 standalone.py -p 80 -d ../public --log-level=debug -m websocket/handler_map.txt -w websocket --allow-draft75 
+python2.6 standalone.py -p 80 -d ../public -x /cgi --log-level=debug -m websocket/handler_map.txt -w websocket --allow-draft75 
