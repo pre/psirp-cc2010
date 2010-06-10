@@ -1,4 +1,8 @@
 
+/* NOTE: Nothing is escaped in any received content! 
+ *       You can display html tags or break the json element.
+ */
+
 var Subscriber = function(wsAddress, messageElementId, sid, rid, caller) {
 
   if (!("WebSocket" in window)) {

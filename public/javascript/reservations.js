@@ -1,4 +1,6 @@
 
+/* Experimental stuff .. */
+
 
 window.onload = function() {
   
@@ -16,12 +18,12 @@ window.onload = function() {
       +  "<li class='reserved-by'>Peke Vaara</li>"
       +  "<li class='reserved-at easydate'>Wed, 09 Jun 2010 06:42:23 -0700</li>"
       + "</ul>");
+    $(this).append('<p class="freeInfo">Free seat!</p>')
     $(this).append('<button class="cancel click">Cancel reservation</button>');
 
   });
   
   $('img.reservation, img.confirmed, img.reserved').hide();
-  reserver.markReservations();
   
   $('.seat img.reservation').live('click', function() {
     $(this).parent()[0].seat.reserve();
@@ -88,8 +90,12 @@ var Seat = function(sid, rid, domId, reserver) {
   
   this.reserverName = function() {
     return $("#"+this.domId +" .reserved-by").html();
-  }
+  };
   
+  this.isCurrentUsersSeat = function() {
+    return this.reserverName() == reserver.name();
+  };
+   
   this.confirm = function() {
     $("#"+this.domId).removeClass("unconfirmed");
     $("#"+this.domId).removeClass("unavailable");
@@ -97,6 +103,7 @@ var Seat = function(sid, rid, domId, reserver) {
     $("#"+this.domId+" img.confirmed").show();
     $("#"+this.domId+" img.reservation").hide();
     $("#"+this.domId+" img.reserved").hide();
+    this.toggleCancellable();
   };
   
   /* NB. Since all application logic is in JavaScript, it is easily bypassed.
@@ -110,19 +117,14 @@ var Seat = function(sid, rid, domId, reserver) {
     $("#"+this.domId).removeClass("unavailable");
     $("#"+this.domId).addClass("available");
     $("#"+this.domId+" ul.reservation-details").hide();
-    
-  }
+  };
   
   this.make_unavailable = function(reservedBy, reservedAt) {
+    $("#"+this.domId).removeClass("unconfirmed");
     $("#"+this.domId).removeClass("available");
     $("#"+this.domId).addClass("unavailable");
-    $("#"+this.domId+" button.cancel").show();
-    $("#"+this.domId+" img.reservation").hide();
-    $("#"+this.domId+" img.confirmed").hide();
-    $("#"+this.domId+" img.reserved").show();
-    $("#"+this.domId+" ul.reservation-details").show();
-    $("#"+this.domId+" li.reserved-by").html(reservedBy);
-    $("#"+this.domId+" li.reserved-at").html(reservedAt);
+    this.toggleCancellable();
+    this.makeReserved(reservedBy, reservedAt)
     reserver.markReservation("#"+this.domId);
   };
 
@@ -130,10 +132,33 @@ var Seat = function(sid, rid, domId, reserver) {
     $("#"+this.domId).removeClass("unavailable");
     $("#"+this.domId).addClass("available");
     $("#"+this.domId+" button.cancel").hide();
+     this.makeReservable();
+  };
+
+  this.makeReservable = function() {
     $("#"+this.domId+" img.reservation").show();
     $("#"+this.domId+" img.reserved").hide();
     $("#"+this.domId+" img.confirmed").hide();
     $("#"+this.domId+" ul.reservation-details").hide();
+    $("#"+this.domId+" .freeInfo").show();
+  };
+  
+  this.makeReserved = function(reservedBy, reservedAt) {
+    $("#"+this.domId+" .freeInfo").hide();
+    $("#"+this.domId+" img.reservation").hide();
+    $("#"+this.domId+" img.confirmed").hide();
+    $("#"+this.domId+" img.reserved").show();
+    $("#"+this.domId+" ul.reservation-details").show();
+    $("#"+this.domId+" li.reserved-by").html(reservedBy);
+    $("#"+this.domId+" li.reserved-at").html(reservedAt);    
+  };
+  
+  this.toggleCancellable = function() {
+    if (this.isCurrentUsersSeat()) {
+      $("#"+this.domId+" button.cancel").show();
+    } else {
+      $("#"+this.domId+" button.cancel").hide();
+    }
   };
   
 }

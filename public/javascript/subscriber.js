@@ -8,17 +8,12 @@ var Subscriber = function(wsAddress, contentElementId, sid, rid) {
     ws = new WebSocket(wsAddress);
 
     ws.onopen = function() {
-      // Web Socket is connected. You can send data by send() method.
       debug("connected...");
-      ws.send(sid +","+ rid); // comma separated: sid,rid (todo: json)
-      ws.send("more from browser");     // not handled yet
+      ws.send(sid +","+ rid); // comma separated: sid,rid
+      ws.send("more from browser");
     };
 
     ws.onmessage = function (event) {
-      // var data = evt.data;
-      // var i = data.indexOf("!");
-      // var tag = data.slice(0,i);
-      // var val = data.slice(i+1);
       $(contentElementId).append("<br />" + event.data);
     };
 

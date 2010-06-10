@@ -1,11 +1,29 @@
+body {
+  font-size: 16px;
+  line-height: 1.5em;
+  font-family: "Lucida Grande", Verdana, sans-serif;
+}
+
 .seat {
   width:  200px;
   height: 200px;
   margin: 5px;
   padding: 5px;
-  text-align: center;
   border: 2px black dotted;
+  text-align: center;
   float:  left;
+}
+
+ul.reservation-details {
+  list-style-type: none;
+  text-align: left;
+
+}
+
+.freeInfo {
+  font-weight: bold;
+  color: green;
+  font-variant: small-caps;
 }
 
 .click {
@@ -18,6 +36,13 @@
 
 fieldset {
   clear:  both;
+  border: 1px solid gray;
+  margin-top: 1em;
+}
+
+legend {
+  border: 1px solid gray;
+  padding: 0.1em 0.5em;
 }
 
 .confirmed {
