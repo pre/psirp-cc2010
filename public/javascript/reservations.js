@@ -123,9 +123,9 @@ var Seat = function(sid, rid, domId, reserver) {
     $("#"+this.domId).removeClass("unconfirmed");
     $("#"+this.domId).removeClass("available");
     $("#"+this.domId).addClass("unavailable");
-    this.toggleCancellable();
     this.makeReserved(reservedBy, reservedAt)
     reserver.markReservation("#"+this.domId);
+    this.toggleCancellable();
   };
 
   this.make_available = function() {
