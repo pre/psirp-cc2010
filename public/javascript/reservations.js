@@ -151,6 +151,8 @@ var Seat = function(sid, rid, domId, reserver) {
     $("#"+this.domId+" ul.reservation-details").show();
     $("#"+this.domId+" li.reserved-by").html(reservedBy);
     $("#"+this.domId+" li.reserved-at").html(reservedAt);    
+    $("#"+this.domId+" li.reserved-at")[0].title = reservedAt;
+    $("#"+this.domId+" li.reserved-at").easydate(); // FIXME: Only last element gets live update :(
   };
   
   this.toggleCancellable = function() {
